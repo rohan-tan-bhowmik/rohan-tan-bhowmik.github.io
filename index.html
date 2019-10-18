@@ -5,6 +5,11 @@
 	<title>Hello!</title>
 </head>
 <body>
-<button>Cliky</button>
+<button id="but" onclick="change()">Cliky</button>
 </body>
+<script>
+	function change(){
+		document.getElementById("but").innerText = "oh no";
+	}
+</script>
 </html>
