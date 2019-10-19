@@ -1,0 +1,19 @@
+body{
+    background-color: bisque;
+    font-family: 'Lucida Sans', Arial, sans-serif;
+}
+
+h1{
+    text-align: center;
+}
+
+p{
+    text-align: center;
+    font: arial;
+
+}
+
+button{
+    
+    padding: 16px 48px;
+}
