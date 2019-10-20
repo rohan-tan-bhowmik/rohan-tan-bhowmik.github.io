@@ -10,10 +10,26 @@ h1{
 p{
     text-align: center;
     font: arial;
-
 }
 
 button{
-    
     padding: 16px 48px;
+}
+
+#rec{
+    background-color: skyblue;
+}
+
+#rec:hover{
+    background-color: cornflowerblue;
+    transition-duration: 0.5s;
+}
+
+#get{
+    background-color: indianred;
+}
+
+#get:hover{
+    background-color: purple;
+    transition-duration: 0.5s;
 }
