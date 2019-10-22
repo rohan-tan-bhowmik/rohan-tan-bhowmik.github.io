@@ -1,16 +1,79 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Hello!</title>
+    <title>Hello!</title>
+    <style src="index.css"></style>
 </head>
 <body>
 <h1>Speak</h1>
 <p>"My voice is my password, answer me."</p>
-</body>
-<div style="text-align: center;">
-    <button id="rec" style="background-color: skyblue;" onclick="toStop()">Record</button>
-    <button id="stop" style="background-color: salmon; display: none;">Add your voice</button>
-</div>
-<link rel="stylesheet" href="index.css">
+<button onclick="stopRec()" id="rec">Enimf</button>
+<script>
+var stop = false;
+
+function stopRec(){
+    console.log("ye");
+    stop = true;
+}
+
+// appends an audio element to playback and download recording
+function createAudioElement(blobUrl) {
+    const downloadEl = document.createElement('a');
+    downloadEl.style = 'display: block';
+    downloadEl.innerHTML = 'download';
+    downloadEl.download = 'audio.webm';
+    downloadEl.href = blobUrl;
+    const audioEl = document.createElement('audio');
+    audioEl.controls = true;
+    const sourceEl = document.createElement('source');
+    sourceEl.src = blobUrl;
+    sourceEl.type = 'audio/webm';
+    audioEl.appendChild(sourceEl);
+    document.body.appendChild(audioEl);
+    document.body.appendChild(downloadEl);
+}
+
+// request permission to access audio stream
+navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+    // store streaming data chunks in array
+    console.log("3");
+    
+    const chunks = [];
+    // create media recorder instance to initialize recording
+    const recorder = new MediaRecorder(stream);
+    console.log("3");
+    // function to be called when data is received
+    recorder.ondataavailable = e => {
+      // add stream data to chunks
+      chunks.push(e.data);
+      // if recorder is 'inactive' then recording has finished
+      if (recorder.state == 'inactive') {
+          // convert stream data chunks to a 'webm' audio format as a blob
+          const blob = new Blob(chunks, { type: 'audio/webm' });
+          // convert blob to URL so it can be assigned to a audio src attribute
+          createAudioElement(URL.createObjectURL(blob));
+      }
+    };
+    console.log("3");
+
+    // start recording with 1 second time between receiving 'ondataavailable' events
+    recorder.start(0);
+    console.log("3");
+
+    // setTimeout to stop recording after 4 seconds
+    while(!stop){
+        setTimeout(
+            console.log('2')
+            ,100);
+    }
+    recorder.start(0);
+
+    document.getElementById("rec").innerHTML = 'done';
+    recorder.start(0);
+
+    recorder.stop();
+  }).catch(console.error);
+</script>
 <script src="record.js"></script>
+</body>
 </html>
