@@ -2,25 +2,24 @@
 <html>
 <head>
     <title>Hello!</title>
-    <style src="index.css"></style>
 </head>
-<body>
+<body style="text-align: center; font-family: 'Lucida Sans', Arial, sans-serif;">
 <h1>Speak</h1>
 <p>"My voice is my password, answer me."</p>
-<button onclick="stopRec()" id="rec">Enimf</button>
+<button id="rec" style="background-color: skyblue; padding: 16px 48px;">Start Recording</button>
 <script>
 var stop = false;
 
 function stopRec(){
-    console.log("ye");
     stop = true;
+    console.log("d");
 }
 
 // appends an audio element to playback and download recording
 function createAudioElement(blobUrl) {
     const downloadEl = document.createElement('a');
     downloadEl.style = 'display: block';
-    downloadEl.innerHTML = 'download';
+    downloadEl.innerHTML = 'Save file?';
     downloadEl.download = 'audio.webm';
     downloadEl.href = blobUrl;
     const audioEl = document.createElement('audio');
@@ -39,8 +38,9 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
     console.log("3");
     
     const chunks = [];
-    // create media recorder instance to initialize recording
     const recorder = new MediaRecorder(stream);
+
+    // create media recorder instance to initialize recording
     console.log("3");
     // function to be called when data is received
     recorder.ondataavailable = e => {
@@ -53,27 +53,35 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
           // convert blob to URL so it can be assigned to a audio src attribute
           createAudioElement(URL.createObjectURL(blob));
       }
-    };
-    console.log("3");
+    };    
+    document.getElementById('rec').addEventListener('click', function (event) {
+        recorder.start(0);
+        document.getElementById('rec').innerHTML = 'Stop Recording';
+        document.getElementById('rec').style.backgroundColor = 'red';
+        document.getElementById('rec').addEventListener('click', function (event) {
+            document.getElementById('rec').style.display = 'none';
+            recorder.stop();
+        }, false);
+    }, false);
 
-    // start recording with 1 second time between receiving 'ondataavailable' events
-    recorder.start(0);
-    console.log("3");
+    console.log("u");
 
-    // setTimeout to stop recording after 4 seconds
-    while(!stop){
-        setTimeout(
-            console.log('2')
-            ,100);
-    }
-    recorder.start(0);
-
-    document.getElementById("rec").innerHTML = 'done';
-    recorder.start(0);
-
-    recorder.stop();
   }).catch(console.error);
+
+const http = require('http');
+
+const hostname = '127.0.0.1';
+const port = 3000;
+
+const server = http.createServer((req, res) => {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+  res.end('Hello World\n');
+});
+
+server.listen(port, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`);
+});
 </script>
-<script src="record.js"></script>
 </body>
 </html>
