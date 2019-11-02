@@ -15,10 +15,15 @@ function stopRec(){
     console.log("d");
 }
 
+function createNameBox(){
+    //const name = document.createElement
+}
+
 // appends an audio element to playback and download recording
 function createAudioElement(blobUrl) {
     const downloadEl = document.createElement('a');
     downloadEl.style = 'display: block';
+    downloadEl.id = 'download';
     downloadEl.innerHTML = 'Save file?';
     downloadEl.download = 'audio.webm';
     downloadEl.href = blobUrl;
@@ -30,6 +35,15 @@ function createAudioElement(blobUrl) {
     audioEl.appendChild(sourceEl);
     document.body.appendChild(audioEl);
     document.body.appendChild(downloadEl);
+    const text = document.createElement('p');
+    text.style = 'display: block';
+    text.id = 'download';
+    text.innerHTML = 'Save file?';
+    document.getElementById('download').addEventListener('click', function (event){
+        document.getElementById('download').style = 'display: none';
+        console.log("o");
+        text.innerHTML = 'Please move the downloaded .webm file from the Download folder to the local /audio folder... I know this sucks';
+    }, false);
 }
 
 // request permission to access audio stream
@@ -64,24 +78,10 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
         }, false);
     }, false);
 
-    console.log("u");
+
 
   }).catch(console.error);
-
-const http = require('http');
-
-const hostname = '127.0.0.1';
-const port = 3000;
-
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World\n');
-});
-
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
 </script>
+<script src="download.js"></script>
 </body>
 </html>
