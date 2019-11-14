@@ -1,4 +1,4 @@
-var dateTime = new Date("Nov 14, 2019, 10:26:15").getTime();
+var dateTime = new Date("Nov 19, 2019, 11:40:30").getTime();
 var tick = setInterval(function () {
     var currTime = new Date().getTime();
     var diff = dateTime - currTime;
@@ -11,7 +11,7 @@ var tick = setInterval(function () {
 
     var sentence = dayCount + " " + hourCount + " " + minuteCount + " " + secondCount + " " + msCount;
     document.getElementById("timer").innerHTML = sentence;
-    var count = 0;
+    var count = -1;
     if (diff <= 1) {
         document.getElementById("alive").style = "display: inline; word-wrap: break-word;";
         document.getElementById("alive").innerHTML = "";
