@@ -1,4 +1,5 @@
-var dateTime = new Date("Oct 23, 2019, 11:40:30").getTime();
+Learn more or give us feedback
+var dateTime = new Date("Nov 11, 2019, 11:40:30").getTime();
 var tick = setInterval(function () {
     var currTime = new Date().getTime();
     var diff = dateTime - currTime;
