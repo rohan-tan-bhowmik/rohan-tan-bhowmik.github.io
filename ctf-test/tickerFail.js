@@ -1,4 +1,3 @@
-
 var dateTime = new Date("Nov 11, 2019, 11:40:30").getTime();
 var tick = setInterval(function () {
     var currTime = new Date().getTime();
