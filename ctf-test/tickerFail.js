@@ -1,4 +1,7 @@
 var dateTime = new Date("Nov 11, 2019, 11:40:30").getTime();
+
+fetch('qr.txt')
+
 var tick = setInterval(function () {
     var currTime = new Date().getTime();
     var diff = dateTime - currTime;
