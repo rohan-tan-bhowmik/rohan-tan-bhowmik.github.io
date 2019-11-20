@@ -59,7 +59,7 @@ var tick = setInterval(function () {
     var count = -1;
 
     if (diff <= 1) {
-        document.getElementById("alive").style = "display: inline; word-wrap: break-word;";
+        document.getElementById("alive").style = "display: inline; word-wrap: break-word; line-height: 0px;";
         document.getElementById("alive").innerHTML = "";
         clearInterval(tick);
         var offSet = 0;
@@ -69,17 +69,17 @@ var tick = setInterval(function () {
             wCnt++;
             if (wCnt + offSet >= width) {
                 console.log(hCnt);
-                document.getElementById("alive").innerHTML += "<br />";
+                document.getElementById("alive").innerHTML += "<br>";
                 wCnt = 0;
                 offSet = 0;
                 hCnt++;
                 count = 0;
             }
             var m = 59;
-            var n = 20;
+            var n = 2;
             if (wCnt >= m && wCnt < m+34 && hCnt >= n && hCnt < n+34) {
                 if (qrCode[hCnt - n][wCnt - m] == 1) {
-                    document.getElementById("alive").innerHTML += "|||||";
+                    document.getElementById("alive").innerHTML += "&#9608";
                     offSet += 1.25;
                 } else{
                     document.getElementById("alive").innerHTML += "....";
