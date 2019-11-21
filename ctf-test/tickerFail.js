@@ -1,6 +1,6 @@
 
 var dateTime = new Date("Nov 11, 2019, 11:40:30").getTime();
-var width = 195;
+var width = 183;
 var height = 20;
 
 var qrCode = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -59,7 +59,7 @@ var tick = setInterval(function () {
     var count = -1;
 
     if (diff <= 1) {
-        document.getElementById("alive").style = "display: inline; word-wrap: break-word; line-height: 0px;";
+        document.getElementById("alive").style = "display: inline; font-size: 17.75px; word-wrap: break-word; line-height: 0px; letter-spacing: -1px;";
         document.getElementById("alive").innerHTML = "";
         clearInterval(tick);
         var offSet = 0;
@@ -76,13 +76,13 @@ var tick = setInterval(function () {
                 count = 0;
             }
             var m = 59;
-            var n = 2;
+            var n = 0;
             if (wCnt >= m && wCnt < m+34 && hCnt >= n && hCnt < n+34) {
                 if (qrCode[hCnt - n][wCnt - m] == 1) {
                     document.getElementById("alive").innerHTML += "&#9608";
                     offSet += 1.25;
                 } else{
-                    document.getElementById("alive").innerHTML += "....";
+                    document.getElementById("alive").innerHTML += "&nbsp&nbsp&nbsp&#8201&#8201&#8202&#8202&#8202&#8202&#8202&#8202&#8202&#8202&#8202&#8202&#8202&#8202";
                     offSet += 1.25;
                 }
             } else {
