@@ -21,7 +21,7 @@ entries:
       - title: "2021:"
         entries:
           - title: "R. Parthasarathy, <b>R. T. Bhowmik</b>, “Quantum Optical Convolutional Neural Network: A Novel Image Recognition Framework for Quantum Computing,” <i>IEEE Access</i>, <b>9</b>, 103337, 2021. (<a target=”_blank” href='https://doi.org/10.1109/ACCESS.2021.3098775'>https://doi.org/10.1109/ACCESS.2021.3098775</a>)"
-  
+    
   - title: "notable achievements"
     entries:
       - title: "research awards"
@@ -42,7 +42,7 @@ entries:
           - title: "USA Biology Olympiad, Semifinalist (2021-2022)"
           - title: "TEAMS (Tests of Engineering Aptitude, Mathematics, and Science) Competition, National 2nd Place Overall (2022), California 1st Place (2020)"
           - title: "Regional Physics Bowl, 1st Place (2021)"
-          - title: "Arete Labs Online Math Tournament National High School Champion (2022)"
+          -title: "Arete Labs Online Math Tournament National High School Champion (2022)"
 
   - title: info
     entries:
