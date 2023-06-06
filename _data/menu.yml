@@ -2,8 +2,15 @@
 # https://github.com/riggraz/no-style-please#customize-the-menu
 
 entries:
+  - title: about me
+    entries:
+      - title: I am an Egleston Scholar (top 1% of admitted class) at the Fu Foundation School of Engineering and Applied Science at Columbia University. I am also a research intern at the Sean N. Parker Center of Stanford University School of Medicine.
+      - title: I am passionate about artificial intelligence, constantly seeking to learn and develop new machine-learning techniques and build applications based on them, especially in the areas of health, environment, and human-computer interaction. My recent projects include the development of 1) a wildfire prediction method by analyzing trends in environmental, meteorological, and geological data with an aim to mitigate the impact of California’s devastating wildfire seasons, 2) a respiratory disease exacerbation prediction system based on a novel spatio-temporal artificial intelligence algorithm and local environmental sensor network, 3) a machine learning technique for automating patient facial condition assessment and surgery planning, 4) blood alcohol level estimation using infrared imaging and machine learning, and 5) a novel image recognition framework utilizing a quantum optical convolutional neural network.
+      - title: I have published papers based on my research in peer-reviewed journals, including the Journal of Environmental Management, IEEE Access, Electronics, and Facial Plastic Surgery & Aesthetic Medicine. I have won top national awards in the USA Physics, Astronomy & Astrophysics, Junior Math, Computing, and Biology Olympiads and was named Regeneron STS Top 300 Finalist in 2023.
+      - title: Outside of academics, I volunteer with organizations to help sensory-deficient individuals, including the Baker Institute for Children with Hearing Loss, Starkey Hearing Foundation, and VocaliD.
   - title: info
     entries:
+
       - title: a (nearly) no-CSS, fast, minimalist Jekyll theme.
       - title: github repo
         url: https://github.com/riggraz/no-style-please
