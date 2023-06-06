@@ -8,6 +8,7 @@ entries:
       - title: I am passionate about artificial intelligence, constantly seeking to learn and develop new machine-learning techniques and build applications based on them, especially in the areas of health, environment, and human-computer interaction.
       - title: I have published papers based on my research in peer-reviewed journals, including the Journal of Environmental Management, IEEE Access, Electronics, and Facial Plastic Surgery & Aesthetic Medicine. I have won top national awards in the USA Physics, Astronomy & Astrophysics, Junior Math, Computing, and Biology Olympiads and was named Regeneron STS Top 300 Finalist in 2023.
       - title: Outside of academics, I volunteer with organizations to help sensory-deficient individuals, including the Baker Institute for Children with Hearing Loss, Starkey Hearing Foundation, and VocaliD.
+  
   - title: publications
     entries:
       - title: "2023:"
@@ -20,6 +21,7 @@ entries:
       - title: "2021:"
         entries:
           - title: "R. Parthasarathy, <b>R. T. Bhowmik</b>, “Quantum Optical Convolutional Neural Network: A Novel Image Recognition Framework for Quantum Computing,” <i>IEEE Access</i>, <b>9</b>, 103337, 2021. (<a target=”_blank” href='https://doi.org/10.1109/ACCESS.2021.3098775'>https://doi.org/10.1109/ACCESS.2021.3098775</a>)"
+  
   - title: "notable achievements"
     entries:
       - title: "research awards"
@@ -77,6 +79,7 @@ entries:
           - title: with subsubitems
           - title: example page
             url: about
+
   - title: PRO TIP
     entries:
       - title: to edit this menu, edit _data/menu.yml file
