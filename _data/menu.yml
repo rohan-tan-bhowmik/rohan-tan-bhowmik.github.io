@@ -8,8 +8,16 @@ entries:
       - title: I am passionate about artificial intelligence, constantly seeking to learn and develop new machine-learning techniques and build applications based on them, especially in the areas of health, environment, and human-computer interaction. My recent projects include the development of 1) a wildfire prediction method by analyzing trends in environmental, meteorological, and geological data with an aim to mitigate the impact of California’s devastating wildfire seasons, 2) a respiratory disease exacerbation prediction system based on a novel spatio-temporal artificial intelligence algorithm and local environmental sensor network, 3) a machine learning technique for automating patient facial condition assessment and surgery planning, 4) blood alcohol level estimation using infrared imaging and machine learning, and 5) a novel image recognition framework utilizing a quantum optical convolutional neural network.
       - title: I have published papers based on my research in peer-reviewed journals, including the Journal of Environmental Management, IEEE Access, Electronics, and Facial Plastic Surgery & Aesthetic Medicine. I have won top national awards in the USA Physics, Astronomy & Astrophysics, Junior Math, Computing, and Biology Olympiads and was named Regeneron STS Top 300 Finalist in 2023.
       - title: Outside of academics, I volunteer with organizations to help sensory-deficient individuals, including the Baker Institute for Children with Hearing Loss, Starkey Hearing Foundation, and VocaliD.
+  - title: publications
+    entries:
+      - title: 1.	R. T. Bhowmik, Y. S. Jung, J. Aguilera, M. Prunicki, K. Nadeau, “A Multi-Modal Wildfire Prediction and Personalized Early-Warning System Based on a Novel Machine Learning Framework,” Journal of Environmental Management, 341, 117908, 2023 (https://doi.org/10.1016/j.jenvman.2023.117908)
+      - title: github repo
   - title: info
     entries:
+      - title: a (nearly) no-CSS, fast, minimalist Jekyll theme.
+      - title: github repo
+        url: https://github.com/riggraz/no-style-please
+      - title: "used by <a href='https://riggraz.dev'>riggraz.dev</a> and <a href='https://github.com/riggraz/no-style-please/network/dependents'>many others</a>"
 
       - title: a (nearly) no-CSS, fast, minimalist Jekyll theme.
       - title: github repo
