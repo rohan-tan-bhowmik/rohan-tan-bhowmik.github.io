@@ -33,7 +33,7 @@ entries:
           - title: "Environment Protection Agency Special Recognition (2022)"
           - title: "U.S. Naval Research Award (2021)"
           - title: "Broadcom MASTERS National Semifinalist (2019)"
-     - title: "competition awards"
+      - title: "competition awards"
         entries:
           - title: "USA Physics Olympiad National Silver Medalist (2022, 2023)"
           - title: "USA Astronomy & Astrophysics Olympiad, National Top 30 (2021-2022), Bronze Medalist (2023)"
@@ -42,7 +42,8 @@ entries:
           - title: "USA Biology Olympiad, Semifinalist (2021-2022)"
           - title: "TEAMS (Tests of Engineering Aptitude, Mathematics, and Science) Competition, National 2nd Place Overall (2022), California 1st Place (2020)"
           - title: "Regional Physics Bowl, 1st Place (2021)"
-          -title: "Arete Labs Online Math Tournament National High School Champion (2022)"
+          - title: "Arete Labs Online Math Tournament National High School Champion (2022)"
+
 
   - title: info
     entries:
