@@ -2,7 +2,7 @@
 # https://github.com/riggraz/no-style-please#customize-the-menu
 
 
-- title: "<img src='/assets/img/rohan.jpg'>"
+  title: "<img src='/assets/img/rohan.jpg'>"
   - title: about me
     entries:
       - title: I am an Egleston Scholar (top 1% of admitted class) at the Fu Foundation School of Engineering and Applied Science at Columbia University. I am also a research intern at the Sean N. Parker Center of Stanford University School of Medicine.
