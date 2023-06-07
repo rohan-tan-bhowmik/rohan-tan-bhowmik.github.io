@@ -3,7 +3,7 @@
 
 
 entries:
-  - title: "<img src='{{site.baseurl}}/assets/img/rohan.jpg'>"
+  - title: "<img src='/assets/img/rohan.jpg'>"
 
   - title: about me
     entries:
