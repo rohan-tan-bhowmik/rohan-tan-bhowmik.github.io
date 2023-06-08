@@ -43,44 +43,8 @@ entries:
           - title: "TEAMS (Tests of Engineering Aptitude, Mathematics, and Science) Competition, National 2nd Place Overall (2022), California 1st Place (2020)"
           - title: "Regional Physics Bowl, 1st Place (2021)"
           - title: "Arete Labs Online Math Tournament National High School Champion (2022)"
-
-
-  - title: info
-    entries:
-      - title: a (nearly) no-CSS, fast, minimalist Jekyll theme.
-      - title: github repo
-        url: https://github.com/riggraz/no-style-please
-      - title: "used by <a href='https://riggraz.dev'>riggraz.dev</a> and <a href='https://github.com/riggraz/no-style-please/network/dependents'>many others</a>"
-
-      - title: a (nearly) no-CSS, fast, minimalist Jekyll theme.
-      - title: github repo
-        url: https://github.com/riggraz/no-style-please
-      - title: "used by <a href='https://riggraz.dev'>riggraz.dev</a> and <a href='https://github.com/riggraz/no-style-please/network/dependents'>many others</a>"
-
-    post_list:
-      limit: 5
-      show_more: true
-      show_more_text: See archive...
-      show_more_url: archive.html
-
-  - title: posts by category
-    post_list:
-      category: example2
-      show_more: true
-      show_more_text: See more posts...
-      show_more_url: example2-archive.html
-
-  - title: rss
-    url: feed.xml
   
-  - title: another list
+  - title: contact me!
     entries:
-      - title: with subitems
-        entries:
-          - title: with subsubitems
-          - title: example page
-            url: about
-
-  - title: PRO TIP
-    entries:
-      - title: to edit this menu, edit _data/menu.yml file
+      - title: "Email: <a href='mailto:rohan.t.bhowmik@gmail.com'>rohan.t.bhowmik@gmail.com</a>"
+      - title: "<a href='https://www.linkedin.com/in/rohan-tan-bhowmik-045911126'>LinkedIn</a>"
