@@ -2,11 +2,11 @@
 # https://github.com/riggraz/no-style-please#customize-the-menu
 
 entries:
+  <img src='/assets/img/rohan.jpg'>
   - title: about me
     entries:
       - title: I am an Egleston Scholar (top 1% of admitted class) at the Fu Foundation School of Engineering and Applied Science at Columbia University. I am also a research intern at the Sean N. Parker Center of Stanford University School of Medicine.
       - title: I am passionate about artificial intelligence, constantly seeking to learn and develop new machine-learning techniques and build applications based on them, especially in the areas of health, environment, and human-computer interaction.
-      - title: I have published papers based on my research in peer-reviewed journals, including the Journal of Environmental Management, IEEE Access, Electronics, and Facial Plastic Surgery & Aesthetic Medicine. I have won top national awards in the USA Physics, Astronomy & Astrophysics, Junior Math, Computing, and Biology Olympiads and was named Regeneron STS Top 300 Finalist in 2023.
       - title: Outside of academics, I volunteer with organizations to help sensory-deficient individuals, including the Baker Institute for Children with Hearing Loss, Starkey Hearing Foundation, and VocaliD.
   
   - title: publications
