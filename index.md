@@ -57,4 +57,4 @@ title: R. Parthasarathy, <b>R. T. Bhowmik</b>, “Quantum Optical Convolutional 
 <h2>contact me!</h2>
 
 Email: <a href='mailto:rohan.t.bhowmik@gmail.com'>rohan.t.bhowmik@gmail.com</a>
-title: <a href='https://www.linkedin.com/in/rohan-tan-bhowmik-045911126'>LinkedIn</a>
+LinkedIn: <a href='https://www.linkedin.com/in/rohan-tan-bhowmik-045911126'>https://www.linkedin.com/in/rohan-tan-bhowmik-045911126</a>
