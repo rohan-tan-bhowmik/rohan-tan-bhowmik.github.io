@@ -2,7 +2,7 @@
 layout: home
 ---
 
-<a href='https://rohan-tan-bhowmik.github.io/'>home</a> <a href='https://rohan-tan-bhowmik.github.io/research/'>research</a>
+navigation: <a href='https://rohan-tan-bhowmik.github.io'>home</a> <a href='https://rohan-tan-bhowmik.github.io/research'>research</a>
 
 <img src='/assets/img/rohan.jpg' width=200>
 
