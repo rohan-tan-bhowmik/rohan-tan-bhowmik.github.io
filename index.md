@@ -45,14 +45,14 @@ title: R. Parthasarathy, <b>R. T. Bhowmik</b>, “Quantum Optical Convolutional 
 </ul>
 
 <h3>competition awards</h3>
-USA Physics Olympiad National Silver Medalist (2022, 2023)
-USA Astronomy & Astrophysics Olympiad, National Top 30 (2021-2022), Bronze Medalist (2023)
-USA Junior Math Olympiad Qualifier (2020), American Invitational Math Exam Qualifier (2020-2023)
-USA Computational Olympiad Gold Level (2020-2023)
-USA Biology Olympiad, Semifinalist (2021-2022)
-TEAMS (Tests of Engineering Aptitude, Mathematics, and Science) Competition, National 2nd Place Overall (2022), California 1st Place (2020)
-Regional Physics Bowl, 1st Place (2021)
-Arete Labs Online Math Tournament National High School Champion (2022)
+<li>USA Physics Olympiad National Silver Medalist (2022, 2023)</li>
+<li>USA Astronomy & Astrophysics Olympiad, National Top 30 (2021-2022), Bronze Medalist (2023)</li>
+<li>USA Junior Math Olympiad Qualifier (2020), American Invitational Math Exam Qualifier (2020-2023)</li>
+<li>USA Computational Olympiad Gold Level (2020-2023)</li>
+<li>USA Biology Olympiad, Semifinalist (2021-2022)</li>
+<li>TEAMS (Tests of Engineering Aptitude, Mathematics, and Science) Competition, National 2nd Place Overall (2022), California 1st Place (2020)</li>
+<li>Regional Physics Bowl, 1st Place (2021)</li>
+<li>Arete Labs Online Math Tournament National High School Champion (2022)</li>
   
 <h2>contact me!</h2>
 
