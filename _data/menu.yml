@@ -1,9 +1,13 @@
 # For documentation on this file, see:
 # https://github.com/riggraz/no-style-please#customize-the-menu
 
+hello test
+
+title: hello test
+
 entries:
-  title: "<img src='/assets/img/rohan.jpg' width="400">"
-  title: about me
+  - title: "<img src='/assets/img/rohan.jpg' width="400">"
+  - title: about me
     entries:
       - title: I am an Egleston Scholar (top 1% of admitted class) at the Fu Foundation School of Engineering and Applied Science at Columbia University. I am also a research intern at the Sean N. Parker Center of Stanford University School of Medicine.
       - title: I am passionate about artificial intelligence, constantly seeking to learn and develop new machine-learning techniques and build applications based on them, especially in the areas of health, environment, and human-computer interaction.
