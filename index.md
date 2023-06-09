@@ -6,7 +6,6 @@ navigation: <a href='https://rohan-tan-bhowmik.github.io'>home</a> <a href='http
 
 <img src='/assets/img/rohan.jpg' width=200>
 
-
 <h2>about me</h2>
 
 I am an Egleston Scholar (top 1% of admitted class) at the Fu Foundation School of Engineering and Applied Science at Columbia University. I am also a research intern at the Sean N. Parker Center of Stanford University School of Medicine.
