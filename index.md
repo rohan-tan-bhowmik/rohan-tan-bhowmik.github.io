@@ -15,7 +15,7 @@ Outside of academics, I volunteer with organizations to help sensory-deficient i
   
 <h2>publications</h2>
 <h3>2023:</h3>
-<b>R. T. Bhowmik</b>, Y. S. Jung, J. Aguilera, M. Prunicki, K. Nadeau, “A Multi-Modal Wildfire Prediction and Personalized Early-Warning System Based on a Novel Machine Learning Framework,” <i>Journal of Environmental Management</i>, <b>341</b>, 117908, 2023 (<a target=”_blank” href='https://doi.org/10.1016/j.jenvman.2023.117908'>https://doi.org/10.1016/j.jenvman.2023.117908</a>)
+<b>R. T. Bhowmik</b>, Y. S. Jung, J. Aguilera, M. Prunicki, K. Nadeau, “A Multi-Modal Wildfire Prediction and Personalized Early-Warning System Based on a Novel Machine Learning Framework,” <i>Journal of Environmental Management</i>, <b>341</b>, 117908, 2023. <a target="_blank" href='https://doi.org/10.1016/j.jenvman.2023.117908'>(Link)</a>
 
 <a href='https://www.linkedin.com/in/rohan-tan-bhowmik-045911126'>https://www.linkedin.com/in/rohan-tan-bhowmik-045911126</a>
 
