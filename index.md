@@ -14,9 +14,12 @@ I am passionate about artificial intelligence, constantly seeking to learn and d
 Outside of academics, I volunteer with organizations to help sensory-deficient individuals, including the Baker Institute for Children with Hearing Loss, Starkey Hearing Foundation, and VocaliD.
   
 <h2>publications</h2>
-
 <h3>2023:</h3>
 <b>R. T. Bhowmik</b>, Y. S. Jung, J. Aguilera, M. Prunicki, K. Nadeau, “A Multi-Modal Wildfire Prediction and Personalized Early-Warning System Based on a Novel Machine Learning Framework,” <i>Journal of Environmental Management</i>, <b>341</b>, 117908, 2023 (<a target=”_blank” href='https://doi.org/10.1016/j.jenvman.2023.117908'>https://doi.org/10.1016/j.jenvman.2023.117908</a>)
+
+<a href='https://www.linkedin.com/in/rohan-tan-bhowmik-045911126'>https://www.linkedin.com/in/rohan-tan-bhowmik-045911126</a>
+
+<a target="_blank" href='https://doi.org/10.1016/j.jenvman.2023.117908'>https://doi.org/10.1016/j.jenvman.2023.117908</a>
 
 <b>R. T. Bhowmik</b>, C. Kandathil, S. P. Most, “Automating the Standardized Cosmesis and Health Nasal Outcomes Survey (SCHNOS) Classification with Convolutional Neural Networks,” <i>Facial Plastic Surgery & Aesthetic Medicine</i>, PMID: 36749153, 2023 (<a target=”_blank” href='https://doi.org/10.1089/fpsam.2022.0306'>https://doi.org/10.1089/fpsam.2022.0306</a>)
 
