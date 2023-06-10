@@ -15,7 +15,7 @@ Links: <a href='https://doi.org/10.1016/j.jenvman.2023.117908'>Paper</a> and <a 
 
 <h2>Automating the Standardized Cosmesis and Health Nasal Outcomes Survey Classification with Convolutional Neural Networks</h2>
 
-<img src='/assets/img/research-fpsam.jpg'>
+<img src='/assets/img/research-fpsam.png'>
 <br>
 Currently, the aesthetic appearance and structure of the nose in a rhinoplasty patient is evaluated by a surgeon, without automation. This paper compares the assessment of convolutional neural networks (CNNs) (machine learning) and a rhinoplasty surgeon's impression of the nose before rhinoplasty. Preoperative nasal images were scored using a modified standardized cosmesis and health nasal outcomes survey (SCHNOS) questionnaire. Artificial intelligence (AI) models based on CNNs were developed and trained to classify patient nasal aesthetics into one of five categories, representing even intervals on the SCHNOS scoring scale. The models' performances were benchmarked against expert surgeon evaluation. Two hundred thirty-five preoperative patient images were included in the study. The best-performing AI model achieved 61% accuracy and 0.449 average Matthews Correlation Coefficient on new patients. This pilot study suggests a proof-of-concept for AI to allow an automated patient assessment tool trained on preoperative patient images with a potential utility for counseling rhinoplasty patients.
 
@@ -23,7 +23,7 @@ Links: <a href='https://www.liebertpub.com/doi/10.1089/fpsam.2022.0306'>Paper</a
 
 <h2>A Multi-Modal Respiratory Disease Exacerbation Prediction Technique Based on a Spatio-Temporal Machine Learning Architecture</h2>
 
-<img src='/assets/img/research-electronics.jpg'>
+<img src='/assets/img/research-electronics.png'>
 <br>
 Chronic respiratory diseases, such as the Chronic Obstructive Pulmonary Disease (COPD) and asthma, are a serious health crisis, affecting a large number of people globally and inflicting major costs on the economy. Current methods for assessing the progression of respiratory symptoms are either subjective and inaccurate, or complex and cumbersome, and do not incorporate environmental factors to track individualized risks. Lacking predictive assessments and early intervention, unexpected exacerbations often lead to hospitalizations and high medical costs. This work presents a multi-modal solution for predicting the exacerbation risks of respiratory diseases, such as COPD, based on a novel spatio-temporal machine learning architecture for real-time and accurate respiratory events detection, and tracking of local environmental and meteorological data and trends. The proposed new neural network model blends key attributes of both convolutional and recurrent neural architectures, allowing extraction of the salient spatial and temporal features encoded in respiratory sounds, thereby leading to accurate classification and tracking of symptoms. Combined with the data from environmental and meteorological sensors, and a predictive model based on retrospective medical studies, this solution can assess and provide early warnings of respiratory disease exacerbations, thereby potentially reducing hospitalization rates and medical costs.
 
@@ -31,7 +31,7 @@ Links: <a href='https://doi.org/10.3390/electronics11162562'>Paper</a> and <a hr
 
 <h2>Quantum Optical Convolutional Neural Network: A Novel Image Recognition Framework for Quantum Computing</h2>
 
-<img src='/assets/img/research-ieee.jpg'>
+<img src='/assets/img/research-ieee.png'>
 <br>
 Large machine learning models based on Convolutional Neural Networks (CNNs) with rapidly increasing numbers of parameters are being deployed in a wide array of computer vision tasks. However, the insatiable demand for computing resources required to train these models is fast outpacing the advancement of classical computing hardware, and new frameworks including Optical Neural Networks (ONNs) and quantum computing are being explored as future alternatives. In this work, we report a novel quantum computing based deep learning model, the Quantum Optical Convolutional Neural Network (QOCNN), to alleviate the computational bottleneck in future computer vision applications. Using the MNIST dataset, we have benchmarked this new architecture against a traditional CNN model based on the seminal LeNet architecture. We have also compared the performance against previously reported ONNs, the GridNet and ComplexNet, and a Quantum Optical Neural Network (QONN) that we built by combining the ComplexNet with quantum-inspired sinusoidal nonlinearities. Our work extends the prior research on QONN by adding quantum convolution and pooling layers. We have evaluated the models using the metrics of accuracies, confusion matrices, Receiver Operating Characteristic curves, and Matthews Correlation Coefficients. The performance of the models were similar, and the metrics indicated that the new QOCNN model is robust. Finally, we estimated the gains in computational efficiencies from executing this novel framework on a quantum computer, concluding that switching to a quantum computing based approach to deep learning may result in comparable accuracies to classical models while simultaneously achieving unprecedented boosts in computational performances and power allocation.
 
