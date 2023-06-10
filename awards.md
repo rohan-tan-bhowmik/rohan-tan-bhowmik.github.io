@@ -29,6 +29,6 @@ Navigation: <a href='https://rohan-tan-bhowmik.github.io'>Home</a> <a href='http
 <li>Arete Labs Online Math Tournament National High School Champion (2022)</li>
 </ul>
 
-<br /><br />
+<br />
 
 <a href='https://rohan-tan-bhowmik.github.io'>Home</a>

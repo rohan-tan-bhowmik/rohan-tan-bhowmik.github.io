@@ -36,6 +36,6 @@ Large machine learning models based on Convolutional Neural Networks (CNNs) with
 
 Link: <a href='https://ieeexplore.ieee.org/document/9492087'>Paper</a> 
 
-<br /><br />
+<br />
 
 <a href='https://rohan-tan-bhowmik.github.io'>Home</a>

@@ -20,6 +20,6 @@ Navigation: <a href='https://rohan-tan-bhowmik.github.io'>Home</a> <a href='http
 <li>R. Parthasarathy, <b>R. T. Bhowmik</b>, “Quantum Optical Convolutional Neural Network: A Novel Image Recognition Framework for Quantum Computing,” <i>IEEE Access</i>, <b>9</b>, 103337, 2021. (<a target="_blank" href='https://doi.org/10.1109/ACCESS.2021.3098775'>Link</a>)</li>
 </ol>
 
-<br /><br />
+<br />
 
 <a href='https://rohan-tan-bhowmik.github.io'>Home</a>
