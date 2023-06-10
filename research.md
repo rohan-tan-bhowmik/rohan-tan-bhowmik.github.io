@@ -15,7 +15,7 @@ Links: <a href='https://doi.org/10.1016/j.jenvman.2023.117908'>Paper</a> and <a 
 
 <h2>Automating the Standardized Cosmesis and Health Nasal Outcomes Survey Classification with Convolutional Neural Networks</h2>
 
-<img src='/assets/img/research-fpsam.png' height=400>
+<img src='/assets/img/research-fpsam.png' height=650>
 <br>
 Currently, the aesthetic appearance and structure of the nose in a rhinoplasty patient is evaluated by a surgeon, without automation. This paper compares the assessment of convolutional neural networks (CNNs) (machine learning) and a rhinoplasty surgeon's impression of the nose before rhinoplasty. Preoperative nasal images were scored using a modified standardized cosmesis and health nasal outcomes survey (SCHNOS) questionnaire. Artificial intelligence (AI) models based on CNNs were developed and trained to classify patient nasal aesthetics into one of five categories, representing even intervals on the SCHNOS scoring scale. The models' performances were benchmarked against expert surgeon evaluation. Two hundred thirty-five preoperative patient images were included in the study. The best-performing AI model achieved 61% accuracy and 0.449 average Matthews Correlation Coefficient on new patients. This pilot study suggests a proof-of-concept for AI to allow an automated patient assessment tool trained on preoperative patient images with a potential utility for counseling rhinoplasty patients.
 
