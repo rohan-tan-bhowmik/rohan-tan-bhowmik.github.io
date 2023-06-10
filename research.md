@@ -1,9 +1,9 @@
 ---
 layout: page
-title: research experience
+title: Research Projects
 ---
 
-navigation: <a href='https://rohan-tan-bhowmik.github.io'>home</a> <a href='https://rohan-tan-bhowmik.github.io/research'>research</a>
+Navigation: <a href='https://rohan-tan-bhowmik.github.io'>home</a> <a href='https://rohan-tan-bhowmik.github.io/research'>research</a>
 
 <h2>A multi-modal wildfire prediction and early-warning system based on a novel machine learning framework</h2>
 
@@ -19,7 +19,7 @@ Links: <a href='https://doi.org/10.1016/j.jenvman.2023.117908'>Paper</a> and <a 
 <br>
 Currently, the aesthetic appearance and structure of the nose in a rhinoplasty patient is evaluated by a surgeon, without automation. This paper compares the assessment of convolutional neural networks (CNNs) (machine learning) and a rhinoplasty surgeon's impression of the nose before rhinoplasty. Preoperative nasal images were scored using a modified standardized cosmesis and health nasal outcomes survey (SCHNOS) questionnaire. Artificial intelligence (AI) models based on CNNs were developed and trained to classify patient nasal aesthetics into one of five categories, representing even intervals on the SCHNOS scoring scale. The models' performances were benchmarked against expert surgeon evaluation. Two hundred thirty-five preoperative patient images were included in the study. The best-performing AI model achieved 61% accuracy and 0.449 average Matthews Correlation Coefficient on new patients. This pilot study suggests a proof-of-concept for AI to allow an automated patient assessment tool trained on preoperative patient images with a potential utility for counseling rhinoplasty patients.
 
-Links: <a href='https://www.liebertpub.com/doi/10.1089/fpsam.2022.0306'>Paper</a>
+Link: <a href='https://www.liebertpub.com/doi/10.1089/fpsam.2022.0306'>Paper</a>
 
 <h2>A Multi-Modal Respiratory Disease Exacerbation Prediction Technique Based on a Spatio-Temporal Machine Learning Architecture</h2>
 
@@ -35,4 +35,4 @@ Links: <a href='https://doi.org/10.3390/electronics11162562'>Paper</a> and <a hr
 <br>
 Large machine learning models based on Convolutional Neural Networks (CNNs) with rapidly increasing numbers of parameters are being deployed in a wide array of computer vision tasks. However, the insatiable demand for computing resources required to train these models is fast outpacing the advancement of classical computing hardware, and new frameworks including Optical Neural Networks (ONNs) and quantum computing are being explored as future alternatives. In this work, we report a novel quantum computing based deep learning model, the Quantum Optical Convolutional Neural Network (QOCNN), to alleviate the computational bottleneck in future computer vision applications. Using the MNIST dataset, we have benchmarked this new architecture against a traditional CNN model based on the seminal LeNet architecture. We have also compared the performance against previously reported ONNs, the GridNet and ComplexNet, and a Quantum Optical Neural Network (QONN) that we built by combining the ComplexNet with quantum-inspired sinusoidal nonlinearities. Our work extends the prior research on QONN by adding quantum convolution and pooling layers. We have evaluated the models using the metrics of accuracies, confusion matrices, Receiver Operating Characteristic curves, and Matthews Correlation Coefficients. The performance of the models were similar, and the metrics indicated that the new QOCNN model is robust. Finally, we estimated the gains in computational efficiencies from executing this novel framework on a quantum computer, concluding that switching to a quantum computing based approach to deep learning may result in comparable accuracies to classical models while simultaneously achieving unprecedented boosts in computational performances and power allocation.
 
-Links: <a href='https://ieeexplore.ieee.org/document/9492087'>Paper</a> 
+Link: <a href='https://ieeexplore.ieee.org/document/9492087'>Paper</a> 

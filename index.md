@@ -2,12 +2,12 @@
 layout: home
 ---
 
-navigation: <a href='https://rohan-tan-bhowmik.github.io'>home</a> <a href='https://rohan-tan-bhowmik.github.io/research'>research</a>
+Navigation: <a href='https://rohan-tan-bhowmik.github.io'>home</a> <a href='https://rohan-tan-bhowmik.github.io/research'>research</a>
 <br>
 
 <img src='/assets/img/rohan.jpg' width=200>
 
-<h2>about me</h2>
+<h2>About me</h2>
 
 I am an incoming freshman and Egleston Scholar (top 1% of admitted class) at the Fu Foundation School of Engineering and Applied Science at Columbia University. I am also a research intern at the Sean N. Parker Center of Stanford University School of Medicine.
 
@@ -15,7 +15,7 @@ I am passionate about artificial intelligence, constantly seeking to learn and d
 
 Outside of academics, I volunteer with organizations to help sensory-deficient individuals, including the Baker Institute for Children with Hearing Loss, Starkey Hearing Foundation, and VocaliD.
   
-<h2>publications</h2>
+<h2>Publications</h2>
 <h3>2023:</h3>
 <b>R. T. Bhowmik</b>, Y. S. Jung, J. Aguilera, M. Prunicki, K. Nadeau, “A Multi-Modal Wildfire Prediction and Personalized Early-Warning System Based on a Novel Machine Learning Framework,” <i>Journal of Environmental Management</i>, <b>341</b>, 117908, 2023. (<a target="_blank" href='https://doi.org/10.1016/j.jenvman.2023.117908'>Link</a>)
 
@@ -27,8 +27,8 @@ Outside of academics, I volunteer with organizations to help sensory-deficient i
 <h3>2021:</h3>
 R. Parthasarathy, <b>R. T. Bhowmik</b>, “Quantum Optical Convolutional Neural Network: A Novel Image Recognition Framework for Quantum Computing,” <i>IEEE Access</i>, <b>9</b>, 103337, 2021. (<a target="_blank" href='https://doi.org/10.1109/ACCESS.2021.3098775'>Link</a>)
 
-<h2>notable achievements</h2>
-<h3>research awards</h3>
+<h2>Notable achievements</h2>
+<h3>Research awards</h3>
 
 <ul>
 <li>Regeneron Science Talent Search National Top 300 Scholar (2023)</li>
@@ -40,7 +40,7 @@ R. Parthasarathy, <b>R. T. Bhowmik</b>, “Quantum Optical Convolutional Neural 
 <li>Broadcom MASTERS National Semifinalist (2019)</li>
 </ul>
 
-<h3>competition awards</h3>
+<h3>Competition awards</h3>
 <ul>
 <li>USA Physics Olympiad National Silver Medalist (2022, 2023)</li>
 <li>USA Astronomy & Astrophysics Olympiad, National Top 30 (2021-2022), Bronze Medalist (2023)</li>
@@ -52,7 +52,8 @@ R. Parthasarathy, <b>R. T. Bhowmik</b>, “Quantum Optical Convolutional Neural 
 <li>Arete Labs Online Math Tournament National High School Champion (2022)</li>
 </ul>
 
-<h2>contact me!</h2>
+<h2>Contact me!</h2>
 
 Email: <a href='mailto:rohan.t.bhowmik@gmail.com'>rohan.t.bhowmik@gmail.com</a>
+
 LinkedIn: <a href='https://www.linkedin.com/in/rohan-tan-bhowmik-045911126'>https://www.linkedin.com/in/rohan-tan-bhowmik-045911126</a>
