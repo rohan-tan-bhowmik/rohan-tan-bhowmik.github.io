@@ -3,7 +3,7 @@ layout: page
 title: Research Projects
 ---
 
-Navigation: <a href='https://rohan-tan-bhowmik.github.io'>home</a> <a href='https://rohan-tan-bhowmik.github.io/research'>research</a>
+Navigation: <a href='https://rohan-tan-bhowmik.github.io'>Home</a> <a href='https://rohan-tan-bhowmik.github.io/research'>Research</a>
 
 <h2>A multi-modal wildfire prediction and early-warning system based on a novel machine learning framework</h2>
 
