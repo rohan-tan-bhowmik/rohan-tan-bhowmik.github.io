@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Publications
+title: Publications (peer-reviewed)
 ---
 
 Navigation: <a href='https://rohan-tan-bhowmik.github.io'>Home</a> <a href='https://rohan-tan-bhowmik.github.io/research'>Research</a> <a href='https://rohan-tan-bhowmik.github.io/publications'>Publications</a> <a href='https://rohan-tan-bhowmik.github.io/awards'>Awards</a>
