@@ -2,9 +2,7 @@
 layout: home
 ---
 
-Navigation: <a href='https://rohan-tan-bhowmik.github.io'>Home</a> <a href='https://rohan-tan-bhowmik.github.io/research'>Research</a> <a href='https://rohan-tan-bhowmik.github.io/publications'>Publications</a> <a href='https://rohan-tan-bhowmik.github.io/awards'>Awards</a>
-<br />
-<br />
+Navigation: <a href='https://rohan-tan-bhowmik.github.io'>Home</a> <a href='https://rohan-tan-bhowmik.github.io/research'>Research</a> <a href='https://rohan-tan-bhowmik.github.io/publications'>Publications</a> <a href='https://rohan-tan-bhowmik.github.io/awards'>Awards</a>\
 <img src='/assets/img/rohan.jpg' width=200>
 
 <h2>About me</h2>
