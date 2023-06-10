@@ -3,7 +3,8 @@ layout: home
 ---
 
 Navigation: <a href='https://rohan-tan-bhowmik.github.io'>Home</a> <a href='https://rohan-tan-bhowmik.github.io/research'>Research</a>
-<br><img src='/assets/img/rohan.jpg' width=200>
+<br/>
+<img src='/assets/img/rohan.jpg' width=200>
 
 <h2>About me</h2>
 
