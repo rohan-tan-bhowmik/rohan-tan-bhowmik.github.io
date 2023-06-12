@@ -3,8 +3,6 @@ layout: page
 title: Awards
 ---
 
-Navigation: <a href='https://rohan-tan-bhowmik.github.io'>Home</a> <a href='https://rohan-tan-bhowmik.github.io/research'>Research</a> <a href='https://rohan-tan-bhowmik.github.io/publications'>Publications</a> <a href='https://rohan-tan-bhowmik.github.io/awards'>Awards</a>
-
 <h2>Research awards</h2>
 
 <ul>
