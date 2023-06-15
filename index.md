@@ -2,7 +2,7 @@
 layout: home
 ---
 
-Navigation: <a href='https://rohan-tan-bhowmik.github.io'>Home</a> <a href='https://rohan-tan-bhowmik.github.io/research'>Research</a> <a href='https://rohan-tan-bhowmik.github.io/publications'>Publications</a> <a href='https://rohan-tan-bhowmik.github.io/awards'>Awards</a>
+<a href='https://rohan-tan-bhowmik.github.io'>Home</a> <a href='https://rohan-tan-bhowmik.github.io/research'>Research</a> <a href='https://rohan-tan-bhowmik.github.io/publications'>Publications</a> <a href='https://rohan-tan-bhowmik.github.io/awards'>Awards</a>
 <br /><br />
 <img src='/assets/img/rohan.jpg' width=200>
 
@@ -17,6 +17,4 @@ Outside of academics, I volunteer with organizations to help sensory-deficient i
 
 <h2>Contact me!</h2>
 
-Email: <a href='mailto:rohan.t.bhowmik@gmail.com'>rohan.t.bhowmik@gmail.com</a>
-
-LinkedIn: <a href='https://www.linkedin.com/in/rohan-tan-bhowmik-045911126'>https://www.linkedin.com/in/rohan-tan-bhowmik-045911126</a>
+<a href='mailto:rohan.t.bhowmik@gmail.com'>Email</a> <a href='https://www.linkedin.com/in/rohan-tan-bhowmik-045911126'>LinkedIn</a>
