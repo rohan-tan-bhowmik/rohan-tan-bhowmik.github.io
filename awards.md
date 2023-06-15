@@ -26,7 +26,3 @@ title: Awards
 <li>Regional Physics Bowl, 1st Place (2021)</li>
 <li>Arete Labs Online Math Tournament National High School Champion (2022)</li>
 </ul>
-
-<br />
-
-<a href='https://rohan-tan-bhowmik.github.io'>Home</a>

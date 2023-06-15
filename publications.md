@@ -23,8 +23,3 @@ title: Publications
 <ol start="8">
 <li>R. T. Bhowmik, “A Multi-Modal Wildfire Prediction and Personalized Early-Warning System Based on a Novel Machine Learning Framework,” Stanford BigEarth Hackathon, 2022.</li>
 </ol>
-
-
-<br />
-
-<a href='https://rohan-tan-bhowmik.github.io'>Home</a>
