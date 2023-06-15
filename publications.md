@@ -3,7 +3,7 @@ layout: page
 title: Publications
 ---
 
-<h2>Journal papers (peer-reviewed)</h2>
+<h2>Journal papers</h2>
 
 <ol>
 <li><b>R. T. Bhowmik</b>, Y. S. Jung, J. Aguilera, M. Prunicki, K. Nadeau, “A Multi-Modal Wildfire Prediction and Personalized Early-Warning System Based on a Novel Machine Learning Framework,” <i>Journal of Environmental Management</i>, <b>341</b>, 117908, 2023. (<a target="_blank" href='https://doi.org/10.1016/j.jenvman.2023.117908'>Link</a>)</li>
