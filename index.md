@@ -12,7 +12,7 @@ I am an incoming freshman and Egleston Scholar (top 1% of admitted class) at the
 
 I am passionate about artificial intelligence, constantly seeking to learn and develop new machine-learning techniques and build applications based on them, especially in the areas of health, environment, and human-computer interaction.
 
-Outside of academics, I volunteer with organizations to help sensory-deficient individuals, including the Baker Institute for Children with Hearing Loss, Starkey Hearing Foundation, and VocaliD.
+Outside of academics, I participate in school orchestra as a clarinetist, play tennis, and volunteer with organizations to help sensory-deficient individuals, including the Baker Institute for Children with Hearing Loss, Starkey Hearing Foundation, and VocaliD.
 
 
 <h2>Contact me!</h2>

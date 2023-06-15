@@ -6,10 +6,11 @@ title: Awards
 <h2>Research awards</h2>
 
 <ul>
+<li>Egleston Scholarship, Columbia University (2023)</li>
 <li>Regeneron Science Talent Search National Top 300 Scholar (2023)</li>
-<li>S. T. Yau High School Science Award, Computer Science Division Bronze Medal (2022)</li>
 <li>Synopsys Science and Engineering Fair First Place (2023)</li>
 <li>South Coast Air Quality Management District Award (2023)</li>
+<li>S. T. Yau High School Science Award, Computer Science Division Bronze Medal (2022)</li>
 <li>Environment Protection Agency Special Recognition (2022)</li>
 <li>U.S. Naval Research Award (2021)</li>
 <li>Broadcom MASTERS National Semifinalist (2019)</li>
