@@ -6,7 +6,8 @@ title: Awards
 <h2>Research awards</h2>
 
 <ul>
-<li>Egleston Scholarship, Columbia University (2023)</li>
+<li>Egleston Scholar, Columbia University (2023)</li>
+<li>Turing Scholar, University of Texas at Austin (2023)</li>
 <li>Regeneron Science Talent Search, National Top 300 Scholar (2023)</li>
 <li>Synopsys Science and Engineering Fair, First Place (2023)</li>
 <li>South Coast Air Quality Management District Award (2023)</li>
