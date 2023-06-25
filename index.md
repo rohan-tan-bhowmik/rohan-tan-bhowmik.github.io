@@ -8,7 +8,7 @@ layout: home
 
 <h2>About me</h2>
 
-I am an incoming freshman at Stanford University. I am also a research intern at the Sean N. Parker Center of Stanford University School of Medicine.
+I am an incoming freshman at Stanford University. I am also a research intern at the Sean N. Parker Center of Stanford School of Medicine.
 
 I am passionate about artificial intelligence, constantly seeking to learn and develop new machine-learning techniques and build applications based on them, especially in the areas of health, environment, and human-computer interaction.
 
