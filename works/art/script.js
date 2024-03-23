@@ -32,12 +32,14 @@ console.log("hj")
 function startDrawing(e) {
     console.log('Mouse down, start drawing'); // Diagnostic log
     isDrawing = true;
+    startNewLine = true; // Set the flag to start a new line    
     draw(e); // Ensure drawing starts immediately
 }
 
 // Function to stop drawing
 function stopDrawing() {
     isDrawing = false;
+    startNewLine = true;
     ctx.beginPath(); // Start a new path to not connect lines
 }
 
@@ -112,11 +114,22 @@ socket.on('board state', (state) => {
 });
 
 // Mouse event listeners
-canvas.addEventListener('mousedown', (e) => {
-    isDrawing = true;
-    startNewLine = true; // Set the flag to start a new line
-    draw(e); // This ensures a dot is placed if the mouse doesn't move
-});
+canvas.addEventListener('mousedown', startDrawing);
 canvas.addEventListener('mousemove', draw);
 canvas.addEventListener('mouseup', stopDrawing);
 canvas.addEventListener('mouseout', stopDrawing);
+
+canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // Prevent scrolling/zooming
+    startDrawing(e.touches[0]); // Use the first touch point
+}, { passive: false });
+
+canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault(); // Prevent scrolling/zooming
+    draw(e.touches[0]); // Use the first touch point
+}, { passive: false });
+
+canvas.addEventListener('touchend', (e) => {
+    e.preventDefault(); // Prevent any potential scroll/zoom behavior
+    stopDrawing();
+}, { passive: false });
