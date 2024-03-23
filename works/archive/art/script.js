@@ -25,7 +25,8 @@ colors.forEach(color => {
 let isDrawing = false;
 
 // Connect to WebSocket server
-const socket = io('https://showy-sedate-run.glitch.me');
+const socket = io('http://localhost:3000');
+console.log("hj")
 
 // Function to start drawing
 function startDrawing(e) {

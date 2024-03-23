@@ -2,12 +2,12 @@
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);
-const io = require('socket.io');/*(http, {
+const io = require('socket.io')(http, {
     cors: {
         origin: "*", // Adjust this to be more restrictive based on your deployment
         methods: ["GET", "POST"]
     }
-});*/
+});
 
 app.use(express.static('public')); // Serve static files
 
