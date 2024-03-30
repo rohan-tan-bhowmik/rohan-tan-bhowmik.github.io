@@ -2,38 +2,41 @@ let socket;
 let isDrawing = false; // Flag to track drawing state
 let isNewStroke = false;
 
+function generateUID() {
+    const timestamp = (new Date()).getTime().toString(36);
+    const randomPortion = Math.random().toString(36).substr(2, 9);
+    return timestamp + randomPortion;
+}
+
+// Store the generated UID for the session
+const userUID = generateUID();
+
 function setup() {
     const canvas = createCanvas(800, 600);
     canvas.parent('drawingCanvas');
     background(255);
 
+    // Connect to the WebSocket server
     socket = io.connect('https://showy-sedate-run.glitch.me');
     console.log("Connected");
 
+    // Listen for drawing events from the server
     socket.on('drawing', (data) => {
-        // Adjusted to handle isNewStroke if needed
-        drawLine(data.x, data.y, data.px, data.py, data.isNewStroke);
+        drawLine(data.x, data.y, data.px, data.py);
     });
-
-    // Ask for the user's name and emit it to the server
-    const username = prompt("What's your name?");
-    socket.emit('setUsername', username);
 }
 
-// Adjusted drawLine to optionally handle isNewStroke
-function drawLine(x, y, px, py, isNewStroke = false) {
-    if (isNewStroke) {
-        // Handle new stroke initialization if needed
-    }
+// New function to draw line based on received data
+function drawLine(x, y, px, py) {
+    // Use previous (px, py) and current (x, y) coordinates to draw a line
     line(px, py, x, y);
 }
-
 
 function mousePressed() {
     // Start drawing
     isDrawing = true;
     isNewStroke = true; // Starting a new stroke
-    //sendMouse(mouseX, mouseY, mouseX, mouseY); // Initial point
+    sendMouse(mouseX, mouseY, mouseX, mouseY); // Initial point
 }
 
 function mouseDragged() {
@@ -56,7 +59,8 @@ function sendMouse(x, y, px, py) {
         y,
         px, // Previous mouseX position
         py, // Previous mouseY position
-        isNewStroke
+        isNewStroke,
+        userUID // Include the unique identifier
     };
 
     // Emit the drawing data to the server

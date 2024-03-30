@@ -153,17 +153,34 @@ function drawBristles(px, py, x, y, baseThickness, speed) {
 
 
 
-
+let userColors = {};
 
 
 function handleDrawingEvent(data) {
+  // Assign a random color to the user if it hasn't been assigned yet
+  if (!userColors[data.userUID]) {
+    userColors[data.userUID] = {
+        r: random(255),
+        g: random(255),
+        b: random(255)
+    };
+  }
+
+  let userColor = userColors[data.userUID];
+  stroke(userColor.r, userColor.g, userColor.b);
+  fill(userColor.r, userColor.g, userColor.b); // If you're also using fill
+
   if (data.isNewStroke) {
-    isFirstStroke = true;
-    prevThickness = 10;
-    thicknessChangeRate = 0;
-    prevSpeed = 0;
-    prevBristlePoints = []; // Clear previous bristle points at the start of a new stroke
-}
+      // Reset drawing attributes at the start of a new stroke
+      isFirstStroke = true;
+      prevThickness = 10;
+      thicknessChangeRate = 0;
+      prevSpeed = 0;
+      prevBristlePoints = [];
+      directionAngle = random(TWO_PI); // Consider user-specific direction if needed
+  } else {
+      isFirstStroke = false;
+  }
 
 
   let currentSpeed = sqrt((data.x - data.px) * (data.x - data.px) + (data.y - data.py) * (data.y - data.py));
