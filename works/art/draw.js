@@ -7,21 +7,27 @@ function setup() {
     canvas.parent('drawingCanvas');
     background(255);
 
-    // Connect to the WebSocket server
     socket = io.connect('https://showy-sedate-run.glitch.me');
     console.log("Connected");
 
-    // Listen for drawing events from the server
     socket.on('drawing', (data) => {
-        drawLine(data.x, data.y, data.px, data.py);
+        // Adjusted to handle isNewStroke if needed
+        drawLine(data.x, data.y, data.px, data.py, data.isNewStroke);
     });
+
+    // Ask for the user's name and emit it to the server
+    const username = prompt("What's your name?");
+    socket.emit('setUsername', username);
 }
 
-// New function to draw line based on received data
-function drawLine(x, y, px, py) {
-    // Use previous (px, py) and current (x, y) coordinates to draw a line
+// Adjusted drawLine to optionally handle isNewStroke
+function drawLine(x, y, px, py, isNewStroke = false) {
+    if (isNewStroke) {
+        // Handle new stroke initialization if needed
+    }
     line(px, py, x, y);
 }
+
 
 function mousePressed() {
     // Start drawing
