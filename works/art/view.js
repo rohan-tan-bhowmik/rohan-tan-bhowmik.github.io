@@ -8,9 +8,13 @@ let prevSpeed = 0; // To keep track of the previous speed for calculating accele
 let prevBristlePoints = []; // Holds the start and end points for each bristle
 let userStates = {}; // Stores the drawing state for each user
 
-let timerDuration = 180 * 1000; // 3 minutes in milliseconds
+let timerDuration = 6 * 1000; // 3 minutes in milliseconds
 let timerDisplay = document.querySelector('.timer'); // Timer display element
 let overlay;
+
+let showCredits = false;
+let creditsOpacity = 0;
+let creditsShown = false;
 
 function setup() {
   overlay = loadImage('https://rohan-tan-bhowmik.github.io/works/art/soundbox-logo.png', img => {
@@ -26,7 +30,7 @@ function setup() {
       }
     }
     img.updatePixels();
-    let factor = 0.5;
+    let factor = 0.25;
     let newWidth = img.width * factor;
     let newHeight = img.height * factor;
     img.resize(newWidth, newHeight);
@@ -56,9 +60,19 @@ function updateTimer() {
 
   // Stop timer when it reaches 0
   if (timerDuration < 0) {
-      clearInterval(updateTimer);
-      timerDisplay.textContent = "00:00.0000";
-      socket.emit('timerEnded');
+    clearInterval(updateTimer);
+    timerDisplay.textContent = "00:00.0000";
+
+    // Emit 'timerEnded' event with canvas data
+    socket.emit('timerEnded');
+
+    // Optionally, prompt the user to download the canvas as an image
+    // This is just to illustrate the saving action; it's not necessary for sending the data via socket
+    //saveCanvas('myDrawing', 'png');
+    setTimeout(() => {
+      showCredits = true; // After 3 seconds, start showing "hello"
+      
+    }, 1000); // Wait for 3 seconds
   }
 }
 
@@ -146,7 +160,7 @@ function initializeUserState(userUID) {
 //LOOPY
 function drawBristles(px, py, x, y, baseThickness, speed, currentState) {
   let bristles = 10;
-  let baseRadius = 5;
+  let baseRadius = 2;
 
   // Keep thickness inversely proportional to speed for thinner lines at higher speeds
   let adjustedThickness = max(map(speed, 0, 50, baseThickness, baseThickness / 3), 1);
@@ -242,8 +256,26 @@ function draw(){
     // Use the image function with calculated x, y for centering
     image(overlay, x, y);
   }
-}
+  if (showCredits && !creditsShown && creditsOpacity < 255) {
+    creditsOpacity += 255 / (60 * 10); // Assuming 60 FPS, increase opacity over 3 seconds
 
+    textSize(12); // Set a smaller text size for "hello"
+    textAlign(CENTER, BOTTOM); // Align text at the bottom center
+    strokeWeight(0);
+    fill(0, 0, 0, constrain(creditsOpacity, 0, 255)); // Use the current opacity for the text
+    text("\"Wake Up\" - Rage Against the Machine", width / 2, height - 38); // Position "hello" at the bottom
+    fill(0, 0, 0, constrain(creditsOpacity - 10, 0, 255)); // Use the current opacity for the text
+    text("April 5th, 2024 @ Press Play: Carol Reiley and the Robots", width / 2, height - 22); // Position "hello" at the bottom
+    textSize(14); // Set a smaller text size for "hello"
+    fill(0, 0, 0, constrain(creditsOpacity - 20, 0, 255)); // Use the current opacity for the text
+    text("Made by Rohan Tan Bhowmik", width / 2, height - 6); // Position "hello" at the bottom
+    console.log(creditsOpacity);
+    if (creditsOpacity > 60) {
+      creditsShown = true;
+      socket.emit('canvasData', { canvasData: canvas.toDataURL('image/png') });
+    }
+  }
+}
 function handleDrawingEvent(data) {
     // Check if this is a new user or a new stroke from an existing user
     if (!userStates[data.userUID] || data.isNewStroke) {
