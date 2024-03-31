@@ -50,6 +50,18 @@ function setup() {
         let fs = fullscreen();
         fullscreen(true);
     });
+
+    // Prevent default touch actions on the canvas to stop scrolling/zooming
+    const canvasElement = document.getElementById('defaultCanvas0'); // p5.js canvas ID
+    if (canvasElement) {
+        canvasElement.addEventListener('touchstart', preventDefaultTouch, { passive: false });
+        canvasElement.addEventListener('touchmove', preventDefaultTouch, { passive: false });
+        canvasElement.addEventListener('touchend', preventDefaultTouch, { passive: false });
+    }
+}
+
+function preventDefaultTouch(e) {
+    e.preventDefault();
 }
 
 let lastDrawTime = 0; // Keeps track of the last time the user drew
@@ -80,6 +92,11 @@ function draw() {
         text("Draw Time Remaining: " + timer/1000, width / 2, 50); // Display the timer
     }
 }
+
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+    // Additional logic to adjust layout or elements like buttons if necessary
+  }
 
 // New function to draw line based on received data
 function drawLine(x, y, px, py) {
