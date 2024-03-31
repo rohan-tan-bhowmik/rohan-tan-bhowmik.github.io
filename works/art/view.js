@@ -6,14 +6,101 @@ let prevThickness = 10; // Initial thickness
 let thicknessChangeRate = 0; // Rate of change of thickness (first derivative)
 let prevSpeed = 0; // To keep track of the previous speed for calculating acceleration
 let prevBristlePoints = []; // Holds the start and end points for each bristle
+let userStates = {}; // Stores the drawing state for each user
+
+let timerDuration = 180 * 1000; // 3 minutes in milliseconds
+let timerDisplay = document.querySelector('.timer'); // Timer display element
+let overlay;
 
 function setup() {
-    socket = io.connect('https://showy-sedate-run.glitch.me');
+  overlay = loadImage('https://rohan-tan-bhowmik.github.io/works/art/soundbox-logo.png', img => {
+    img.loadPixels();
+    for (let i = 0; i < img.pixels.length; i += 4) {
+      // The pixels array is a 1D array with 4 values per pixel: [R, G, B, A]
+      let alpha = img.pixels[i + 3];
+      if (alpha !== 0) { // If pixel is not transparent
+        img.pixels[i] = 0; // R
+        img.pixels[i + 1] = 0; // G
+        img.pixels[i + 2] = 0; // B
+        // Alpha remains unchanged
+      }
+    }
+    img.updatePixels();
+    let factor = 0.5;
+    let newWidth = img.width * factor;
+    let newHeight = img.height * factor;
+    img.resize(newWidth, newHeight);
+  });
 
-    createCanvas(800, 600);
-    background(255);
-    // Setup socket connection and event listener...
-    socket.on('drawing', handleDrawingEvent);
+
+  socket = io.connect('https://showy-sedate-run.glitch.me');
+  createCanvas(800, 600);
+  background('#222');
+  socket.on('drawing', handleDrawingEvent);
+
+  setInterval(updateTimer, 19); // Update the timer every 100 milliseconds
+}
+
+
+function updateTimer() {
+  // Calculate minutes, seconds, and milliseconds from timerDuration
+  let minutes = Math.floor(timerDuration / 60000);
+  let seconds = Math.floor((timerDuration % 60000) / 1000);
+  let milliseconds = Math.floor((timerDuration % 1000));
+
+  // Format timer string
+  timerDisplay.textContent = `${strPad(minutes)}:${strPad(seconds)}.${strPad(milliseconds, 3)}`;
+
+  // Decrease timer duration
+  timerDuration -= 19;
+
+  // Stop timer when it reaches 0
+  if (timerDuration < 0) {
+      clearInterval(updateTimer);
+      timerDisplay.textContent = "00:00.0000";
+      socket.emit('timerEnded');
+  }
+}
+
+function strPad(number, length = 2) {
+  let str = number.toString();
+  while (str.length < length) {
+    str = '0' + str;
+  }
+  return str;
+}
+
+function generateBrightColor() {
+  let color;
+  let attempt = 0;
+  do {
+    color = {
+      r: Math.floor(Math.random() * 256),
+      g: Math.floor(Math.random() * 256),
+      b: Math.floor(Math.random() * 256)
+    };
+    // Increment attempt to avoid potentially infinite loops in edge cases
+    attempt++;
+    // Continue if any single color component is greater than 200
+  } while (Math.max(color.r, color.g, color.b) <= 200 && attempt < 100);
+
+  return color;
+}
+
+
+function initializeUserState(userUID) {
+  // Initialize or reset drawing parameters for the user
+  return {
+      prevX: 0,
+      prevY: 0,
+      isFirstStroke: true,
+      prevThickness: 10,
+      thicknessChangeRate: 0,
+      prevSpeed: 0,
+      prevBristlePoints: [],
+      color: generateBrightColor(),
+      directionAngle: random(TWO_PI)
+  };
 }
 
 // function drawBristles(px, py, x, y, baseThickness, speed) {
@@ -54,14 +141,10 @@ function setup() {
 //       prevBristlePoints[i] = {sx: startX, sy: startY, ex: endX, ey: endY};
 //   }
 // }
-let cr = Math.random()*255;
-let cb = Math.random()*255;
-let cg = Math.random()*255;
-let directionAngle = Math.random()*Math.PI*2;
 
  // RGBA where A is fully opaque
 //LOOPY
-function drawBristles(px, py, x, y, baseThickness, speed) {
+function drawBristles(px, py, x, y, baseThickness, speed, currentState) {
   let bristles = 10;
   let baseRadius = 5;
 
@@ -69,9 +152,7 @@ function drawBristles(px, py, x, y, baseThickness, speed) {
   let adjustedThickness = max(map(speed, 0, 50, baseThickness, baseThickness / 3), 1);
 
   // Calculate direction of the main stroke for control point alignment
-  
-  stroke(cr, cb, cg, 255); // RGBA where A is fully opaque
-
+  let randomInfluence = random()-0.5;
   for (let i = 0; i < bristles; i++) {
     let angleVar = random(TWO_PI);
     let radiusVar = baseRadius + random(-2, 2);
@@ -90,15 +171,16 @@ function drawBristles(px, py, x, y, baseThickness, speed) {
     //stroke(random(255), random(255), random(255), 255); // RGBA where A is fully opaque
 
     // Align control points with the direction of the stroke for smoother transitions
-    let controlDist = dist(px, py, x, y) * 0.5; // Distance influence on control point
-    let cpX = (startX + endX) / 2 + cos(directionAngle) * controlDist;
-    let cpY = (startY + endY) / 2 + sin(directionAngle) * controlDist;
+    let randomNum = random()-0.5;
+    let controlDist = dist(px, py, x, y) * (randomNum+randomInfluence); // Distance influence on control point
+    let cpX = (startX + endX) / 2 + cos(currentState.directionAngle) * controlDist;
+    let cpY = (startY + endY) / 2 + sin(currentState.directionAngle) * controlDist;
 
     noFill();
     bezier(startX, startY, cpX, cpY, cpX, cpY, endX, endY);
 
     // Update bristle points for continuity
-    prevBristlePoints[i] = {sx: startX, sy: startY, ex: endX, ey: endY};
+    currentState.prevBristlePoints[i] = {sx: startX, sy: startY, ex: endX, ey: endY};
   }
   // Reset stroke color to default black for other operations
   stroke(0);
@@ -151,43 +233,40 @@ function drawBristles(px, py, x, y, baseThickness, speed) {
 // }
 // }
 
-
-
-let userColors = {};
-
+function draw(){
+  if (overlay) {
+    // Calculate the position to center the image
+    let x = (width - overlay.width) / 2;
+    let y = (height - overlay.height) / 2;
+    
+    // Use the image function with calculated x, y for centering
+    image(overlay, x, y);
+  }
+}
 
 function handleDrawingEvent(data) {
-  // Assign a random color to the user if it hasn't been assigned yet
-  if (!userColors[data.userUID]) {
-    userColors[data.userUID] = {
-        r: random(255),
-        g: random(255),
-        b: random(255)
-    };
+    // Check if this is a new user or a new stroke from an existing user
+    if (!userStates[data.userUID] || data.isNewStroke) {
+      if (!userStates[data.userUID]) {
+          userStates[data.userUID] = initializeUserState(data.userUID);
+      } else if (data.isNewStroke) {
+          userStates[data.userUID].isFirstStroke = true;
+          userStates[data.userUID].prevBristlePoints = [];
+          // Consider resetting other parameters if needed
+      }
   }
 
-  let userColor = userColors[data.userUID];
-  stroke(userColor.r, userColor.g, userColor.b);
-  fill(userColor.r, userColor.g, userColor.b); // If you're also using fill
+  // Retrieve the current user's state
+  let currentState = userStates[data.userUID];
+  console.log(currentState)
+  stroke(currentState.color.r, currentState.color.g, currentState.color.b);
 
-  if (data.isNewStroke) {
-      // Reset drawing attributes at the start of a new stroke
-      isFirstStroke = true;
-      prevThickness = 10;
-      thicknessChangeRate = 0;
-      prevSpeed = 0;
-      prevBristlePoints = [];
-      directionAngle = random(TWO_PI); // Consider user-specific direction if needed
-  } else {
-      isFirstStroke = false;
-  }
-
-
+  // Call drawBristles with user-specific bristle points
   let currentSpeed = sqrt((data.x - data.px) * (data.x - data.px) + (data.y - data.py) * (data.y - data.py));
   
   // Calculate acceleration (difference in speed from the last event)
-  let speedAcceleration = currentSpeed - prevSpeed;
-  prevSpeed = currentSpeed; // Update prevSpeed for the next event
+  let speedAcceleration = currentSpeed - currentState.prevSpeed;
+  currentState.prevSpeed = currentSpeed; // Update prevSpeed for the next event
 
   // Adjust the target rate of change based on speed acceleration
   // More acceleration implies a quicker change in thickness
@@ -197,23 +276,85 @@ function handleDrawingEvent(data) {
   thicknessChangeRate = lerp(thicknessChangeRate, targetRateOfChange, 0.1);
 
   // Apply the rate of change to the thickness
-  let targetThickness = prevThickness + thicknessChangeRate;
+  let targetThickness = currentState.prevThickness + thicknessChangeRate;
   // Ensure thickness stays within reasonable bounds
   targetThickness = constrain(targetThickness, 1, 20);
 
   // Smooth transition of the actual thickness towards the target thickness
-  let thickness = lerp(prevThickness, targetThickness, 0.1);
+  let thickness = lerp(currentState.prevThickness, targetThickness, 0.1);
 
   if (!isFirstStroke) {
-      drawBristles(prevX, prevY, data.x, data.y, thickness, currentSpeed);
+      drawBristles(currentState.prevX, currentState.prevY, data.x, data.y, thickness, currentSpeed, currentState);
   } else {
       isFirstStroke = false;
   }
 
-  // Update for the next drawing event
-  prevX = data.x;
-  prevY = data.y;
-  prevThickness = thickness; // Update the thickness for next time
+  // Update global tracking variables
+  // Update the current user's state
+  currentState.prevX = data.x;
+  currentState.prevY = data.y;
+  currentState.prevThickness = lerp(currentState.prevThickness, targetThickness, 0.1);
+  // Update other state variables as needed
 }
+
+// function handleDrawingEvent(data) {
+//   // Assign a random color to the user if it hasn't been assigned yet
+//   if (!userColors[data.userUID]) {
+//     userColors[data.userUID] = {
+//         r: random(255),
+//         g: random(255),
+//         b: random(255)
+//     };
+//   }
+
+//   let userColor = userColors[data.userUID];
+//   stroke(userColor.r, userColor.g, userColor.b);
+//   fill(userColor.r, userColor.g, userColor.b); // If you're also using fill
+
+//   if (data.isNewStroke) {
+//       // Reset drawing attributes at the start of a new stroke
+//       isFirstStroke = true;
+//       prevThickness = 10;
+//       thicknessChangeRate = 0;
+//       prevSpeed = 0;
+//       prevBristlePoints = [];
+//       directionAngle = random(TWO_PI); // Consider user-specific direction if needed
+//   } else {
+//       isFirstStroke = false;
+//   }
+
+
+//   let currentSpeed = sqrt((data.x - data.px) * (data.x - data.px) + (data.y - data.py) * (data.y - data.py));
+  
+//   // Calculate acceleration (difference in speed from the last event)
+//   let speedAcceleration = currentSpeed - prevSpeed;
+//   prevSpeed = currentSpeed; // Update prevSpeed for the next event
+
+//   // Adjust the target rate of change based on speed acceleration
+//   // More acceleration implies a quicker change in thickness
+//   let targetRateOfChange = map(speedAcceleration, -50, 50, -1, 1);
+
+//   // Smoothly adjust the current rate of change towards the target
+//   thicknessChangeRate = lerp(thicknessChangeRate, targetRateOfChange, 0.1);
+
+//   // Apply the rate of change to the thickness
+//   let targetThickness = prevThickness + thicknessChangeRate;
+//   // Ensure thickness stays within reasonable bounds
+//   targetThickness = constrain(targetThickness, 1, 20);
+
+//   // Smooth transition of the actual thickness towards the target thickness
+//   let thickness = lerp(prevThickness, targetThickness, 0.1);
+
+//   if (!isFirstStroke) {
+//       drawBristles(prevX, prevY, data.x, data.y, thickness, currentSpeed);
+//   } else {
+//       isFirstStroke = false;
+//   }
+
+//   // Update for the next drawing event
+//   prevX = data.x;
+//   prevY = data.y;
+//   prevThickness = thickness; // Update the thickness for next time
+// }
 
 
