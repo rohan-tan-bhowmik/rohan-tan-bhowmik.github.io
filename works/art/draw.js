@@ -44,7 +44,9 @@ function setup() {
         showSaveOptions(); // This function would need to handle UI changes for saving
     });
 
-    canvas.addEventListener('click', function() {
+    text("Tap anywhere to start", width / 2, height / 2);
+
+    canvas.addEventListener('touchstart', function() {
         let fs = fullscreen();
         fullscreen(true);
     });
