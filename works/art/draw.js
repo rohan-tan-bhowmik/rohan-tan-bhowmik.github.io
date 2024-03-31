@@ -68,6 +68,7 @@ function draw() {
 
 
     background('#333'); // Clear background each frame
+    textAlign(CENTER, TOP); // Align text to be at the top center
 
     fill(255); // Set text color
     if (timer <= 0){
