@@ -1,8 +1,6 @@
 let socket;
 let isDrawing = false; // Flag to track drawing state
 let isNewStroke = false;
-let timer = 15000; // 30 seconds countdown
-let countdown; // Holds the countdown interval
 let canDraw = true;
 
 function generateUID() {
@@ -28,10 +26,6 @@ function setup() {
     // Listen for drawing events from the server
     socket.on('drawing', (data) => {
         drawLine(data.x, data.y, data.px, data.py);
-    });
-
-    socket.on('timerEnded', (data) => {
-        canDraw = false; // Disable drawing
     });
 
     socket.on('saveCanvasSuccess', (data) => {
@@ -63,30 +57,8 @@ function preventDefaultTouch(e) {
 let lastDrawTime = 0; // Keeps track of the last time the user drew
 
 function draw() {
-    // Check if the user is currently drawing
-    if (isDrawing && canDraw) {
-        const currentTime = millis(); // Get the current time in milliseconds
-        // Check if at least a second has passed since the last draw
-        let increment = 81;
-        if (currentTime - lastDrawTime >= increment) {
-            timer-=increment;
-            lastDrawTime = currentTime; // Update the last draw time
-        }
-    }
-
 
     background('#333'); // Clear background each frame
-    textAlign(CENTER, TOP); // Align text to be at the top center
-
-    fill(255); // Set text color
-    if (timer <= 0){
-        fill(255, 0, 0);
-        text("Draw Time Remaining: 0.000", width / 2, 50); // Display the timer
-        isDrawing = false; // Optionally stop drawing
-    } else {
-        fill(255);
-        text("Draw Time Remaining: " + timer/1000, width / 2, 50); // Display the timer
-    }
 }
 
 function windowResized() {
@@ -125,7 +97,7 @@ function mouseReleased() {
 // Updated function to include previous coordinates
 // Updated function to include previous coordinates and adjust for canvas position
 function sendMouse(x, y, px, py) {
-    if (timer > 0 && canDraw) {
+    if (canDraw) {
         // Assuming 'canvas' here refers to the p5.js canvas object, which might not be directly accessible by name.
         // If you haven't stored the p5.js canvas object in a variable named 'canvas', use the method below to get its position.
 

@@ -8,15 +8,11 @@ let prevSpeed = 0; // To keep track of the previous speed for calculating accele
 let prevBristlePoints = []; // Holds the start and end points for each bristle
 let userStates = {}; // Stores the drawing state for each user
 
-let timerDuration = 1 * 1000; // 3 minutes in milliseconds
-let timerDisplay = document.querySelector('.timer'); // Timer display element
 let overlay;
 
 let showCredits = false;
 let creditsOpacity = 0;
 let canvasSaved = false;
-
-let gif;
 
 function setup() {
   overlay = loadImage('https://rohan-tan-bhowmik.github.io/works/art/soundbox-logo.png', img => {
@@ -43,61 +39,14 @@ function setup() {
   createCanvas(800, 600);
   background('#222');
   socket.on('drawing', handleDrawingEvent);
-  
-
-  setInterval(updateTimer, 19); // Update the timer every 100 milliseconds
-
-  gif = new GIF({
-    workers: 2,
-    quality: 10,
-    //workerScript: '/dist/gif.worker.js',
-    width: 800,
-    height: 600
-  });
-
-  gif.on('finished', function(blob) {
-      window.open(URL.createObjectURL(blob));
-  });
-
 }
 
 function captureFrame() {
-  gif.addFrame(canvas, {copy: true, delay: 200}); // Adjust delay as needed
-}
-
-function finalizeGIF() {
-  gif.render();
-}
-
-function updateTimer() {
-  // Calculate minutes, seconds, and milliseconds from timerDuration
-  let minutes = Math.floor(timerDuration / 60000);
-  let seconds = Math.floor((timerDuration % 60000) / 1000);
-  let milliseconds = Math.floor((timerDuration % 1000));
-
-  // Format timer string
-  timerDisplay.textContent = `${strPad(minutes)}:${strPad(seconds)}.${strPad(milliseconds, 3)}`;
-
-  // Decrease timer duration
-  timerDuration -= 19;
-
-  // Stop timer when it reaches 0
-  if (timerDuration < 0) {
-    clearInterval(updateTimer);
-    timerDisplay.textContent = "00:00.0000";
-
-    // Emit 'timerEnded' event with canvas data
-    socket.emit('timerEnded');
-
-    // Optionally, prompt the user to download the canvas as an image
-    // This is just to illustrate the saving action; it's not necessary for sending the data via socket
-    //saveCanvas('myDrawing', 'png');
-    setTimeout(() => {
-      showCredits = true; // After 3 seconds, start showing "hello"
-      
-    }, 1000); // Wait for 3 seconds
-  
-  }
+  let dataURL = canvas.toDataURL('image/png');
+  // Emit the saveCanvas event with the image and the serialized GIF sequence
+  socket.emit('saveFrame', { 
+    image: dataURL, // The final canvas state
+  });
 }
 
 function strPad(number, length = 2) {
@@ -298,14 +247,13 @@ function draw(){
       fill(0, 0, 0, constrain(creditsOpacity - 20, 0, 255)); // Use the current opacity for the text
       text("Made by Rohan Tan Bhowmik", width / 2, height - 6); // Position "hello" at the bottom
     } else {
-      
-      console.log(showCredits);
-
       canvasSaved = true; 
       //HERE
       const dataURL = canvas.toDataURL('image/png');
-      socket.emit('saveCanvas', { image: dataURL });
-      console.log("d");
+      
+      socket.emit('saveCanvas', { 
+        image: dataURL // The final canvas state
+      });
     }
   } 
 }
