@@ -8,13 +8,15 @@ let prevSpeed = 0; // To keep track of the previous speed for calculating accele
 let prevBristlePoints = []; // Holds the start and end points for each bristle
 let userStates = {}; // Stores the drawing state for each user
 
-let timerDuration = 6 * 1000; // 3 minutes in milliseconds
+let timerDuration = 1 * 1000; // 3 minutes in milliseconds
 let timerDisplay = document.querySelector('.timer'); // Timer display element
 let overlay;
 
 let showCredits = false;
 let creditsOpacity = 0;
-let creditsShown = false;
+let canvasSaved = false;
+
+let gif;
 
 function setup() {
   overlay = loadImage('https://rohan-tan-bhowmik.github.io/works/art/soundbox-logo.png', img => {
@@ -41,10 +43,31 @@ function setup() {
   createCanvas(800, 600);
   background('#222');
   socket.on('drawing', handleDrawingEvent);
+  
 
   setInterval(updateTimer, 19); // Update the timer every 100 milliseconds
+
+  gif = new GIF({
+    workers: 2,
+    quality: 10,
+    //workerScript: '/dist/gif.worker.js',
+    width: 800,
+    height: 600
+  });
+
+  gif.on('finished', function(blob) {
+      window.open(URL.createObjectURL(blob));
+  });
+
 }
 
+function captureFrame() {
+  gif.addFrame(canvas, {copy: true, delay: 200}); // Adjust delay as needed
+}
+
+function finalizeGIF() {
+  gif.render();
+}
 
 function updateTimer() {
   // Calculate minutes, seconds, and milliseconds from timerDuration
@@ -73,6 +96,7 @@ function updateTimer() {
       showCredits = true; // After 3 seconds, start showing "hello"
       
     }, 1000); // Wait for 3 seconds
+  
   }
 }
 
@@ -100,7 +124,6 @@ function generateBrightColor() {
 
   return color;
 }
-
 
 function initializeUserState(userUID) {
   // Initialize or reset drawing parameters for the user
@@ -247,34 +270,44 @@ function drawBristles(px, py, x, y, baseThickness, speed, currentState) {
 // }
 // }
 
+
 function draw(){
-  if (overlay) {
+  if (!showCredits && overlay) {
     // Calculate the position to center the image
     let x = (width - overlay.width) / 2;
     let y = (height - overlay.height) / 2;
     
     // Use the image function with calculated x, y for centering
     image(overlay, x, y);
-  }
-  if (showCredits && !creditsShown && creditsOpacity < 255) {
-    creditsOpacity += 255 / (60 * 10); // Assuming 60 FPS, increase opacity over 3 seconds
 
-    textSize(12); // Set a smaller text size for "hello"
-    textAlign(CENTER, BOTTOM); // Align text at the bottom center
-    strokeWeight(0);
-    fill(0, 0, 0, constrain(creditsOpacity, 0, 255)); // Use the current opacity for the text
-    text("\"Wake Up\" - Rage Against the Machine", width / 2, height - 38); // Position "hello" at the bottom
-    fill(0, 0, 0, constrain(creditsOpacity - 10, 0, 255)); // Use the current opacity for the text
-    text("April 5th, 2024 @ Press Play: Carol Reiley and the Robots", width / 2, height - 22); // Position "hello" at the bottom
-    textSize(14); // Set a smaller text size for "hello"
-    fill(0, 0, 0, constrain(creditsOpacity - 20, 0, 255)); // Use the current opacity for the text
-    text("Made by Rohan Tan Bhowmik", width / 2, height - 6); // Position "hello" at the bottom
-    console.log(creditsOpacity);
-    if (creditsOpacity > 60) {
-      creditsShown = true;
-      socket.emit('canvasData', { canvasData: canvas.toDataURL('image/png') });
-    }
+    captureFrame();
   }
+  if (showCredits && !canvasSaved) {
+    finalizeGIF();
+    if (creditsOpacity < 60) {
+      creditsOpacity += 255 / (60 * 10); // Assuming 60 FPS, increase opacity over 3 seconds
+
+      textSize(12); // Set a smaller text size for "hello"
+      textAlign(CENTER, BOTTOM); // Align text at the bottom center
+      strokeWeight(0);
+      fill(0, 0, 0, constrain(creditsOpacity, 0, 255)); // Use the current opacity for the text
+      text("\"Wake Up\" - Rage Against the Machine", width / 2, height - 38); // Position "hello" at the bottom
+      fill(0, 0, 0, constrain(creditsOpacity - 10, 0, 255)); // Use the current opacity for the text
+      text("April 5th, 2024 @ Press Play: Carol Reiley and the Robots", width / 2, height - 22); // Position "hello" at the bottom
+      textSize(14); // Set a smaller text size for "hello"
+      fill(0, 0, 0, constrain(creditsOpacity - 20, 0, 255)); // Use the current opacity for the text
+      text("Made by Rohan Tan Bhowmik", width / 2, height - 6); // Position "hello" at the bottom
+    } else {
+      
+      console.log(showCredits);
+
+      canvasSaved = true; 
+      //HERE
+      const dataURL = canvas.toDataURL('image/png');
+      socket.emit('saveCanvas', { image: dataURL });
+      console.log("d");
+    }
+  } 
 }
 function handleDrawingEvent(data) {
     // Check if this is a new user or a new stroke from an existing user

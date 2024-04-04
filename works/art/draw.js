@@ -1,11 +1,9 @@
 let socket;
 let isDrawing = false; // Flag to track drawing state
 let isNewStroke = false;
-let timer = 20000; // 30 seconds countdown
+let timer = 15000; // 30 seconds countdown
 let countdown; // Holds the countdown interval
 let canDraw = true;
-let canvasDataURL; // Variable to store the canvas data URL
-
 
 function generateUID() {
     const timestamp = (new Date()).getTime().toString(36);
@@ -36,11 +34,9 @@ function setup() {
         canDraw = false; // Disable drawing
     });
 
-    socket.on('canvasData', (data) => {
-        // Capture and store the canvas data URL
-        canvasDataURL = data.canvasData;
-    
+    socket.on('saveCanvasSuccess', (data) => {
         // Show save options
+        print(data)
         showSaveOptions(); // This function would need to handle UI changes for saving
     });
 
@@ -167,15 +163,7 @@ function showSaveOptions() {
     let saveImgBtn = createButton('Save Image');
     saveImgBtn.parent(saveDiv);
     saveImgBtn.mousePressed(() => {
-        if (canvasDataURL) {
-            console.log("dsajfsdf");
-            // Create an <a> element to trigger the download
-            let downloadLink = createA(canvasDataURL, 'Download Image');
-            downloadLink.attribute('download', 'myCanvas.png');
-            downloadLink.hide(); // Hide the link, it's not needed to be visible
-            downloadLink.elt.click(); // Simulate a click on the link to trigger the download
-            downloadLink.remove(); // Clean up
-        }
+        window.open("file:///Users/rtbhowmik/Downloads/rohan-tan-bhowmik.github.io/works/art/final.html", '_blank');
     });
         
     // Create save GIF button (note: actual GIF saving requires additional implementation)
