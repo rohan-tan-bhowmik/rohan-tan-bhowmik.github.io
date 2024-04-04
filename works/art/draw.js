@@ -14,7 +14,6 @@ const userUID = generateUID();
 
 function setup() {
     createCanvas(800, 600);
-    background(255);
     frameRate(60); // Ensure standard frame rate for consistency
     textSize(48); // Set text size
     textAlign(CENTER, CENTER); // Align text
@@ -34,7 +33,6 @@ function setup() {
         showSaveOptions(); // This function would need to handle UI changes for saving
     });
 
-    text("Tap anywhere to start", width / 2, height / 2);
 
     canvas.addEventListener('touchstart', function() {
         let fs = fullscreen();

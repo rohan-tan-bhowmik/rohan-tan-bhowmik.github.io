@@ -85,7 +85,8 @@ function initializeUserState(userUID) {
       prevSpeed: 0,
       prevBristlePoints: [],
       color: generateBrightColor(),
-      directionAngle: random(TWO_PI)
+      directionAngle: random(TWO_PI),
+      lastDrawTime: 0
   };
 }
 
@@ -271,6 +272,7 @@ function handleDrawingEvent(data) {
 
   // Retrieve the current user's state
   let currentState = userStates[data.userUID];
+  
   console.log(currentState)
   stroke(currentState.color.r, currentState.color.g, currentState.color.b);
 
@@ -296,7 +298,13 @@ function handleDrawingEvent(data) {
   // Smooth transition of the actual thickness towards the target thickness
   let thickness = lerp(currentState.prevThickness, targetThickness, 0.1);
 
-  if (!isFirstStroke) {
+  let currentTime = Date.now(); // Get current timestamp
+  if (currentTime - currentState.lastDrawTime > 1000) { // Check if gap is more than 1 second
+    data.isNewStroke = true; // Treat this event as starting a new stroke
+  }
+  currentState.lastDrawTime = currentTime;
+
+  if (!data.isNewStroke) {
       drawBristles(currentState.prevX, currentState.prevY, data.x, data.y, thickness, currentSpeed, currentState);
   } else {
       isFirstStroke = false;
