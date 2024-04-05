@@ -61,12 +61,12 @@ function setup() {
     }
 
     saveImgBtn = createButton('Click here to save canvas!');
-    saveImgBtn.position(windowWidth / 2 - saveImgBtn.width / 2, windowHeight - saveImgBtn.height-5); // Adjust position
     saveImgBtn.mousePressed(() => {
         // The functionality to save the image goes here
         window.open("https://rohan-tan-bhowmik.github.io/works/art/final.html", '_blank');
     });
 }
+
 
 function preventDefaultTouch(e) {
     e.preventDefault();

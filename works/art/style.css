@@ -42,7 +42,7 @@ body, html {
 canvas {
     z-index: 1; /* Lower than the timer's z-index */
 }
-/* General button styling */
+/* General button styling adjustment */
 button {
     background-color: #ddd; /* Dark grey background */
     color: #000; /* White text */
@@ -52,7 +52,15 @@ button {
     cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
     outline: none; /* Remove the default focus outline */
     transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover and active states */
+    
+    /* Positioning */
+    position: fixed; /* Fixed positioning to place the button relative to the viewport */
+    bottom: 10px; /* Distance from the bottom of the viewport */
+    left: 50%; /* Centering technique */
+    transform: translateX(-50%); /* Adjust horizontally to truly center the button */
+    z-index: 100; /* Ensure the button is above other content */
 }
+
 
 #loadingIndicator {
     position: absolute;
