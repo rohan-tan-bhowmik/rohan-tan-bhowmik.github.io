@@ -47,10 +47,22 @@ button {
     background-color: #ddd; /* Dark grey background */
     color: #000; /* White text */
     padding: 10px 20px; /* Top and bottom padding, left and right padding */
-    font-size: 16px; /* Adequate text size for readability */
+    font-size: 40px; /* Adequate text size for readability */
     font-family: Arial, sans-serif; /* Consistent font family */
     cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
     outline: none; /* Remove the default focus outline */
     transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover and active states */
 }
 
+#loadingIndicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-family: Arial, sans-serif;
+    transform: translate(-50%, -50%);
+    font-size: 72px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.75);
+    padding: 20px;
+    border-radius: 10px;
+}

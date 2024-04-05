@@ -1,7 +1,16 @@
+
+const loadingIndicator = document.createElement('div');
+loadingIndicator.id = 'loadingIndicator';
+loadingIndicator.innerText = 'Loading...';
+loadingIndicator.style.display = 'none'; // Hidden by default
+document.body.appendChild(loadingIndicator);
+
 let socket = io.connect('https://showy-sedate-run.glitch.me');
+
 
 socket.on('connect', () => {
     console.log(socket.id); // Now it should be defined
+    document.getElementById('loadingIndicator').style.display = 'block'; // Show loading
     socket.emit('getCanvas', {id: socket.id});
 });
 
@@ -16,6 +25,10 @@ socket.on('sentCanvas', (data) => {
     if (data.id === socket.id) {
         console.log("Got a canvas");
         const img = new Image();
+        img.onload = () => {
+            // Hide the loading indicator when the image is loaded
+            document.getElementById('loadingIndicator').style.display = 'none';
+        };
         img.src = data.canvas;
         
         // Style the image to be centered
