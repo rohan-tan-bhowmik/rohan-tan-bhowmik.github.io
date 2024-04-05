@@ -1,3 +1,8 @@
+// Remove default margin and padding from the body
+document.body.style.margin = '0';
+document.body.style.padding = '0';
+document.body.style.overflowX = 'hidden'; // Prevent horizontal scroll
+
 const loadingIndicator = document.createElement('div');
 loadingIndicator.id = 'loadingIndicator';
 loadingIndicator.innerText = 'Loading...';
@@ -29,16 +34,15 @@ socket.on('sentCanvas', (data) => {
         const instructionText = document.createElement('p');
         instructionText.innerText = 'Instructions for downloading:\n\nTap and hold on the image,\nthen select "Save to Photos".';
         instructionText.style.color = 'white'; // Ensure the text is visible on a dark background
-        instructionText.style.margin = '20px 0 60px'; // Add padding at the top and space between the text and the image
         instructionText.style.fontFamily = 'Arial, sans-serif'; // Set font to Arial
+        instructionText.style.marginTop = '0'; // Start right from the top
+        instructionText.style.fontSize = '36px'; // Modify font size
         canvasContainer.insertBefore(instructionText, canvasContainer.firstChild); // Insert the instruction text at the top of the container
 
         const img = new Image();
         img.onload = () => {
             // Hide the loading indicator when the image is loaded
             document.getElementById('loadingIndicator').style.display = 'none';
-            // Scale the image to be 1.5x larger
-            img.style.transform = 'scale(1)';
         };
         img.src = data.canvas;
         img.style.maxWidth = '90%'; // Limits image size to not overflow the viewport
