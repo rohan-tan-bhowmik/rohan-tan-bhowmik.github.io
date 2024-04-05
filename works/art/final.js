@@ -29,7 +29,7 @@ socket.on('sentCanvas', (data) => {
         const instructionText = document.createElement('p');
         instructionText.innerText = 'Instructions for downloading:\n\nTap and hold on the image,\nthen select "Save to Photos".';
         instructionText.style.color = 'white'; // Ensure the text is visible on a dark background
-        instructionText.style.margin = '20px 0 60px'; // Add padding at the top and space between the text and the image
+        instructionText.style.margin = '20px 0 20px'; // Add padding at the top and space between the text and the image
         instructionText.style.fontFamily = 'Arial, sans-serif'; // Set font to Arial
         canvasContainer.insertBefore(instructionText, canvasContainer.firstChild); // Insert the instruction text at the top of the container
 
