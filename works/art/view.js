@@ -39,13 +39,9 @@ function setup() {
   createCanvas(800, 600);
   background('#222');
   socket.on('drawing', handleDrawingEvent);
-}
-
-function captureFrame() {
-  let dataURL = canvas.toDataURL('image/png');
-  // Emit the saveCanvas event with the image and the serialized GIF sequence
-  socket.emit('saveFrame', { 
-    image: dataURL, // The final canvas state
+  socket.on('requestCanvas', (data) => {
+    let dataUrl = canvas.toDataURL('image/png');
+    socket.emit('sendCanvas', {id: data.id, canvas: dataUrl})
   });
 }
 
@@ -55,23 +51,6 @@ function strPad(number, length = 2) {
     str = '0' + str;
   }
   return str;
-}
-
-function generateBrightColor() {
-  let color;
-  let attempt = 0;
-  do {
-    color = {
-      r: Math.floor(Math.random() * 256),
-      g: Math.floor(Math.random() * 256),
-      b: Math.floor(Math.random() * 256)
-    };
-    // Increment attempt to avoid potentially infinite loops in edge cases
-    attempt++;
-    // Continue if any single color component is greater than 200
-  } while (Math.max(color.r, color.g, color.b) <= 200 && attempt < 100);
-
-  return color;
 }
 
 function initializeUserState(userUID) {
@@ -84,7 +63,6 @@ function initializeUserState(userUID) {
       thicknessChangeRate: 0,
       prevSpeed: 0,
       prevBristlePoints: [],
-      color: generateBrightColor(),
       directionAngle: random(TWO_PI),
       lastDrawTime: 0
   };
@@ -222,42 +200,17 @@ function drawBristles(px, py, x, y, baseThickness, speed, currentState) {
 
 
 function draw(){
-  if (!showCredits && overlay) {
-    // Calculate the position to center the image
-    let x = (width - overlay.width) / 2;
-    let y = (height - overlay.height) / 2;
-    
-    // Use the image function with calculated x, y for centering
-    image(overlay, x, y);
+  image(overlay, (width - overlay.width) / 2, (height - overlay.height) / 2);  
 
-    captureFrame();
-  }
-  if (showCredits && !canvasSaved) {
-    finalizeGIF();
-    if (creditsOpacity < 60) {
-      creditsOpacity += 255 / (60 * 10); // Assuming 60 FPS, increase opacity over 3 seconds
-
-      textSize(12); // Set a smaller text size for "hello"
-      textAlign(CENTER, BOTTOM); // Align text at the bottom center
-      strokeWeight(0);
-      fill(0, 0, 0, constrain(creditsOpacity, 0, 255)); // Use the current opacity for the text
-      text("\"Wake Up\" - Rage Against the Machine", width / 2, height - 38); // Position "hello" at the bottom
-      fill(0, 0, 0, constrain(creditsOpacity - 10, 0, 255)); // Use the current opacity for the text
-      text("April 5th, 2024 @ Press Play: Carol Reiley and the Robots", width / 2, height - 22); // Position "hello" at the bottom
-      textSize(14); // Set a smaller text size for "hello"
-      fill(0, 0, 0, constrain(creditsOpacity - 20, 0, 255)); // Use the current opacity for the text
-      text("Made by Rohan Tan Bhowmik", width / 2, height - 6); // Position "hello" at the bottom
-    } else {
-      canvasSaved = true; 
-      //HERE
-      const dataURL = canvas.toDataURL('image/png');
-      
-      socket.emit('saveCanvas', { 
-        image: dataURL // The final canvas state
-      });
-    }
-  } 
+  textSize(16); // Set a smaller text size for "hello"
+  textAlign(CENTER, BOTTOM); // Align text at the bottom center
+  strokeWeight(0);
+  stroke(0);
+  fill(0);
+  text("April 5th, 2024 @ Press Play: Carol Reiley and the Robots", width / 2, height - 24); // Position "hello" at the bottom
+  text("Made by Rohan Tan Bhowmik", width / 2, height - 6); // Position "hello" at the bottom
 }
+
 function handleDrawingEvent(data) {
     // Check if this is a new user or a new stroke from an existing user
     if (!userStates[data.userUID] || data.isNewStroke) {
@@ -274,7 +227,8 @@ function handleDrawingEvent(data) {
   let currentState = userStates[data.userUID];
   
   console.log(currentState)
-  stroke(currentState.color.r, currentState.color.g, currentState.color.b);
+  color = data.color;
+  stroke(color.r, color.g, color.b);
 
   // Call drawBristles with user-specific bristle points
   let currentSpeed = sqrt((data.x - data.px) * (data.x - data.px) + (data.y - data.py) * (data.y - data.py));

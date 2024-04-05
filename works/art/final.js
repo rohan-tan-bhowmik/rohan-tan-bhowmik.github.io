@@ -1,5 +1,9 @@
 let socket = io.connect('https://showy-sedate-run.glitch.me');
 
+socket.on('connect', () => {
+    console.log(socket.id); // Now it should be defined
+    socket.emit('getCanvas', {id: socket.id});
+});
 
 socket.onAny((event, ...args) => {
     if (event != "timerEnded") {
@@ -7,11 +11,12 @@ socket.onAny((event, ...args) => {
     }
 });
 
-socket.on('getCanvasSuccess', (data) => {
-    console.log("Got a canvas");
+socket.on('sentCanvas', (data) => {
+    console.log(data);
     if (data.id === socket.id) {
+        console.log("Got a canvas");
         const img = new Image();
-        img.src = 'data:image/png;base64,' + data.image;
+        img.src = data.canvas;
         
         // Style the image to be centered
         img.style.position = 'absolute';
@@ -27,7 +32,4 @@ socket.on('getCanvasSuccess', (data) => {
     }
 });
 
-socket.emit('getCanvas');
-
 console.log("ok");
-

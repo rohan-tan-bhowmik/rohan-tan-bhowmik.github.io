@@ -9,6 +9,26 @@ function generateUID() {
     return timestamp + randomPortion;
 }
 
+function generateBrightColor() {
+    let color;
+    let attempt = 0;
+    do {
+      color = {
+        r: Math.floor(Math.random() * 256),
+        g: Math.floor(Math.random() * 256),
+        b: Math.floor(Math.random() * 256)
+      };
+      // Increment attempt to avoid potentially infinite loops in edge cases
+      attempt++;
+      // Continue if any single color component is greater than 200
+    } while (Math.max(color.r, color.g, color.b) <= 200 && attempt < 100);
+  
+    return color;
+  }
+
+let color = generateBrightColor();
+
+  
 // Store the generated UID for the session
 const userUID = generateUID();
 
@@ -27,13 +47,6 @@ function setup() {
         drawLine(data.x, data.y, data.px, data.py);
     });
 
-    socket.on('saveCanvasSuccess', (data) => {
-        // Show save options
-        print(data)
-        showSaveOptions(); // This function would need to handle UI changes for saving
-    });
-
-
     canvas.addEventListener('touchstart', function() {
         let fs = fullscreen();
         fullscreen(true);
@@ -46,6 +59,13 @@ function setup() {
         canvasElement.addEventListener('touchmove', preventDefaultTouch, { passive: false });
         canvasElement.addEventListener('touchend', preventDefaultTouch, { passive: false });
     }
+
+    saveImgBtn = createButton('Click here to save canvas!');
+    saveImgBtn.position(windowWidth / 2 - saveImgBtn.width / 2, windowHeight - saveImgBtn.height - 10); // Adjust position
+    saveImgBtn.mousePressed(() => {
+        // The functionality to save the image goes here
+        window.open("file:///Users/rtbhowmik/Downloads/rohan-tan-bhowmik.github.io/works/art/final.html", '_blank');
+    });
 }
 
 function preventDefaultTouch(e) {
@@ -56,13 +76,37 @@ let lastDrawTime = 0; // Keeps track of the last time the user drew
 
 function draw() {
 
-    background('#333'); // Clear background each frame
+    background('#222'); // Clear background each frame
+    // Text setup
+    textSize(60); // Adjust text size as needed
+    fill(153); // White color for the text
+    noStroke();
+    textAlign(CENTER, CENTER);
+    text("Drag here to draw\nSee changes on canvas", width / 2, height / 2); // Position the text 30px above the bottom
+    displayUserColor();
+
 }
 
-function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
-    // Additional logic to adjust layout or elements like buttons if necessary
-  }
+function displayUserColor() {
+    // Ensure we have a valid user state before attempting to display color
+
+    // Text setup
+    textSize(30); // Adjust text size as needed
+    fill(153); // White color for the text
+    noStroke();
+    textAlign(CENTER, CENTER);
+    text("Your color:", width / 2 - 23, height - 50); // Position the text 30px above the bottom
+
+    // Circle setup
+    fill(color.r, color.g, color.b); // Use the user's current color
+    noStroke();
+    ellipse(width / 2 + 77, height - 50, 30, 30); // Draw the circle 10px above the bottom, 20px diameter
+}
+
+// function windowResized() {
+//     resizeCanvas(windowWidth, windowHeight);
+//     // Additional logic to adjust layout or elements like buttons if necessary
+//   }
 
 // New function to draw line based on received data
 function drawLine(x, y, px, py) {
@@ -107,6 +151,7 @@ function sendMouse(x, y, px, py) {
             y: y,
             px: px, // Previous mouseX position adjusted
             py: py, // Previous mouseY position adjusted
+            color: color,
             isNewStroke,
             userUID // Include the unique identifier
         };
@@ -118,32 +163,6 @@ function sendMouse(x, y, px, py) {
         drawLine(x, y, px, py);
     }
 }
-
-function showSaveOptions() {
-    // Create a new div element for save options
-    let saveDiv = createDiv('');
-    saveDiv.id('saveOptions');
-    saveDiv.style('position', 'absolute');
-    saveDiv.style('top', '50%');
-    saveDiv.style('left', '50%');
-    saveDiv.style('transform', 'translate(-50%, -50%)');
-    saveDiv.style('text-align', 'center');
-    
-    // Create save image button
-    let saveImgBtn = createButton('Save Image');
-    saveImgBtn.parent(saveDiv);
-    saveImgBtn.mousePressed(() => {
-        window.open("file:///Users/rtbhowmik/Downloads/rohan-tan-bhowmik.github.io/works/art/final.html", '_blank');
-    });
-        
-    // Create save GIF button (note: actual GIF saving requires additional implementation)
-    let saveGifBtn = createButton('Save GIF');
-    saveGifBtn.parent(saveDiv);
-    saveGifBtn.mousePressed(() => {
-      // Placeholder for GIF saving logic
-      console.log("Save GIF functionality not implemented.");
-    });
-  }
   
   function toggleFullscreen() {
     if (!document.fullscreenElement) {
