@@ -189,3 +189,14 @@ function sendMouse(x, y, px, py) {
         }
     }
 }
+
+window.addEventListener('orientationchange', function() {
+    var orientation = screen.orientation || window.orientation;
+    if (orientation.type === "landscape-primary" || orientation.type === "landscape-secondary") {
+      // Show message asking to rotate back to portrait
+      alert("This application is best viewed in portrait mode.");
+    } else {
+      // Adjust UI for portrait mode
+    }
+  });
+  

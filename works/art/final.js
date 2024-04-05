@@ -35,7 +35,7 @@ socket.on('sentCanvas', (data) => {
         const canvasContainer = document.createElement('div'); // Create a container for the image and text
         document.body.appendChild(canvasContainer);
         canvasContainer.style.textAlign = 'center'; // Center align the text
-        
+
         canvasContainer.style.margin = '0';
         canvasContainer.style.padding = '0';
 
@@ -61,3 +61,14 @@ socket.on('sentCanvas', (data) => {
 });
 
 console.log("ok");
+
+window.addEventListener('orientationchange', function() {
+    var orientation = screen.orientation || window.orientation;
+    if (orientation.type === "landscape-primary" || orientation.type === "landscape-secondary") {
+      // Show message asking to rotate back to portrait
+      alert("This application is best viewed in portrait mode.");
+    } else {
+      // Adjust UI for portrait mode
+    }
+  });
+  
