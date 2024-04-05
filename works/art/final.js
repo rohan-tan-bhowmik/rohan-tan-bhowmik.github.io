@@ -1,12 +1,17 @@
 // Remove default margin and padding from the body
 document.body.style.margin = '0';
 document.body.style.padding = '0';
+document.querySelectorAll("*").forEach(el => {
+    el.style.margin = '0';
+    el.style.padding = '0';
+});
 document.body.style.overflowX = 'hidden'; // Prevent horizontal scroll
 
 const loadingIndicator = document.createElement('div');
 loadingIndicator.id = 'loadingIndicator';
 loadingIndicator.innerText = 'Loading...';
 loadingIndicator.style.display = 'none'; // Hidden by default
+
 document.body.appendChild(loadingIndicator);
 
 let socket = io.connect('https://showy-sedate-run.glitch.me');
@@ -31,6 +36,9 @@ socket.on('sentCanvas', (data) => {
         document.body.appendChild(canvasContainer);
         canvasContainer.style.textAlign = 'center'; // Center align the text
         
+        canvasContainer.style.margin = '0';
+        canvasContainer.style.padding = '0';
+
         const instructionText = document.createElement('p');
         instructionText.innerText = 'Instructions for downloading:\n\nTap and hold on the image,\nthen select "Save to Photos".';
         instructionText.style.color = 'white'; // Ensure the text is visible on a dark background
