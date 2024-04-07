@@ -217,7 +217,7 @@ function draw(){
     fill(0, 0, 0, constrain(creditsOpacity, 0, 255)); // Use the current opacity for the text
     text("\"Wake Up\" - Rage Against the Machine", width / 2, height - 38); // Position "hello" at the bottom
     fill(0, 0, 0, constrain(creditsOpacity - 10, 0, 255)); // Use the current opacity for the text
-    text("April 5th, 2024 @ Press Play: Carol Reiley and the Robots", width / 2, height - 22); // Position "hello" at the bottom
+    text("April 6th, 2024 @ Press Play: Carol Reiley and the Robots", width / 2, height - 22); // Position "hello" at the bottom
     textSize(14); // Set a smaller text size for "hello"
     fill(0, 0, 0, constrain(creditsOpacity - 20, 0, 255)); // Use the current opacity for the text
     text("Made by Rohan Tan Bhowmik", width / 2, height - 6); // Position "hello" at the bottom
