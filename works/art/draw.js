@@ -1,11 +1,7 @@
 let socket;
 let isDrawing = false; // Flag to track drawing state
 let isNewStroke = false;
-let timer = 20000; // 30 seconds countdown
-let countdown; // Holds the countdown interval
 let canDraw = true;
-let canvasDataURL; // Variable to store the canvas data URL
-
 
 function generateUID() {
     const timestamp = (new Date()).getTime().toString(36);
@@ -13,12 +9,31 @@ function generateUID() {
     return timestamp + randomPortion;
 }
 
+function generateBrightColor() {
+    let color;
+    let attempt = 0;
+    do {
+      color = {
+        r: Math.floor(Math.random() * 256),
+        g: Math.floor(Math.random() * 256),
+        b: Math.floor(Math.random() * 256)
+      };
+      // Increment attempt to avoid potentially infinite loops in edge cases
+      attempt++;
+      // Continue if any single color component is greater than 200
+    } while (Math.max(color.r, color.g, color.b) <= 200 && attempt < 100);
+  
+    return color;
+  }
+
+let color = generateBrightColor();
+
+  
 // Store the generated UID for the session
 const userUID = generateUID();
 
 function setup() {
     createCanvas(800, 600);
-    background(255);
     frameRate(60); // Ensure standard frame rate for consistency
     textSize(48); // Set text size
     textAlign(CENTER, CENTER); // Align text
@@ -32,20 +47,6 @@ function setup() {
         drawLine(data.x, data.y, data.px, data.py);
     });
 
-    socket.on('timerEnded', (data) => {
-        canDraw = false; // Disable drawing
-    });
-
-    socket.on('canvasData', (data) => {
-        // Capture and store the canvas data URL
-        canvasDataURL = data.canvasData;
-    
-        // Show save options
-        showSaveOptions(); // This function would need to handle UI changes for saving
-    });
-
-    text("Tap anywhere to start", width / 2, height / 2);
-
     canvas.addEventListener('touchstart', function() {
         let fs = fullscreen();
         fullscreen(true);
@@ -58,7 +59,14 @@ function setup() {
         canvasElement.addEventListener('touchmove', preventDefaultTouch, { passive: false });
         canvasElement.addEventListener('touchend', preventDefaultTouch, { passive: false });
     }
+
+    saveImgBtn = createButton('Click here to save canvas!');
+    saveImgBtn.mousePressed(() => {
+        // The functionality to save the image goes here
+        window.open("https://rohan-tan-bhowmik.github.io/works/art/final.html", '_blank');
+    });
 }
+
 
 function preventDefaultTouch(e) {
     e.preventDefault();
@@ -67,36 +75,38 @@ function preventDefaultTouch(e) {
 let lastDrawTime = 0; // Keeps track of the last time the user drew
 
 function draw() {
-    // Check if the user is currently drawing
-    if (isDrawing && canDraw) {
-        const currentTime = millis(); // Get the current time in milliseconds
-        // Check if at least a second has passed since the last draw
-        let increment = 81;
-        if (currentTime - lastDrawTime >= increment) {
-            timer-=increment;
-            lastDrawTime = currentTime; // Update the last draw time
-        }
-    }
 
+    background('#222'); // Clear background each frame
+    // Text setup
+    textSize(60); // Adjust text size as needed
+    fill(153); // White color for the text
+    noStroke();
+    textAlign(CENTER, CENTER);
+    text("Drag here to draw\nSee changes on canvas", width / 2, height / 2); // Position the text 30px above the bottom
+    displayUserColor();
 
-    background('#333'); // Clear background each frame
-    textAlign(CENTER, TOP); // Align text to be at the top center
-
-    fill(255); // Set text color
-    if (timer <= 0){
-        fill(255, 0, 0);
-        text("Draw Time Remaining: 0.000", width / 2, 50); // Display the timer
-        isDrawing = false; // Optionally stop drawing
-    } else {
-        fill(255);
-        text("Draw Time Remaining: " + timer/1000, width / 2, 50); // Display the timer
-    }
 }
 
-function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
-    // Additional logic to adjust layout or elements like buttons if necessary
-  }
+function displayUserColor() {
+    // Ensure we have a valid user state before attempting to display color
+
+    // Text setup
+    textSize(30); // Adjust text size as needed
+    fill(153); // White color for the text
+    noStroke();
+    textAlign(CENTER, CENTER);
+    text("Your color:", width / 2 - 23, height - 50); // Position the text 30px above the bottom
+
+    // Circle setup
+    fill(color.r, color.g, color.b); // Use the user's current color
+    noStroke();
+    ellipse(width / 2 + 77, height - 50, 30, 30); // Draw the circle 10px above the bottom, 20px diameter
+}
+
+// function windowResized() {
+//     resizeCanvas(windowWidth, windowHeight);
+//     // Additional logic to adjust layout or elements like buttons if necessary
+//   }
 
 // New function to draw line based on received data
 function drawLine(x, y, px, py) {
@@ -129,7 +139,7 @@ function mouseReleased() {
 // Updated function to include previous coordinates
 // Updated function to include previous coordinates and adjust for canvas position
 function sendMouse(x, y, px, py) {
-    if (timer > 0 && canDraw) {
+    if (canDraw) {
         // Assuming 'canvas' here refers to the p5.js canvas object, which might not be directly accessible by name.
         // If you haven't stored the p5.js canvas object in a variable named 'canvas', use the method below to get its position.
 
@@ -141,6 +151,7 @@ function sendMouse(x, y, px, py) {
             y: y,
             px: px, // Previous mouseX position adjusted
             py: py, // Previous mouseY position adjusted
+            color: color,
             isNewStroke,
             userUID // Include the unique identifier
         };
@@ -167,16 +178,24 @@ function showSaveOptions() {
     let saveImgBtn = createButton('Save Image');
     saveImgBtn.parent(saveDiv);
     saveImgBtn.mousePressed(() => {
-        
+        if (canvasDataURL) {
+            console.log("dsajfsdf");
+            // Create an <a> element to trigger the download
+            let downloadLink = createA(canvasDataURL, 'Download Image');
+            downloadLink.attribute('download', 'myCanvas.png');
+            downloadLink.hide(); // Hide the link, it's not needed to be visible
+            downloadLink.elt.click(); // Simulate a click on the link to trigger the download
+            downloadLink.remove(); // Clean up
+        }
     });
         
-    // // Create save GIF button (note: actual GIF saving requires additional implementation)
-    // let saveGifBtn = createButton('Save GIF');
-    // saveGifBtn.parent(saveDiv);
-    // saveGifBtn.mousePressed(() => {
-    //   // Placeholder for GIF saving logic
-    //   console.log("Save GIF functionality not implemented.");
-    // });
+    // Create save GIF button (note: actual GIF saving requires additional implementation)
+    let saveGifBtn = createButton('Save GIF');
+    saveGifBtn.parent(saveDiv);
+    saveGifBtn.mousePressed(() => {
+      // Placeholder for GIF saving logic
+      console.log("Save GIF functionality not implemented.");
+    });
   }
   
   function toggleFullscreen() {
@@ -204,3 +223,14 @@ function showSaveOptions() {
         }
     }
 }
+
+window.addEventListener('orientationchange', function() {
+    var orientation = screen.orientation || window.orientation;
+    if (orientation.type === "landscape-primary" || orientation.type === "landscape-secondary") {
+      // Show message asking to rotate back to portrait
+      alert("This application is best viewed in portrait mode.");
+    } else {
+      // Adjust UI for portrait mode
+    }
+  });
+  

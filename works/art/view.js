@@ -8,13 +8,11 @@ let prevSpeed = 0; // To keep track of the previous speed for calculating accele
 let prevBristlePoints = []; // Holds the start and end points for each bristle
 let userStates = {}; // Stores the drawing state for each user
 
-let timerDuration = 6 * 1000; // 3 minutes in milliseconds
-let timerDisplay = document.querySelector('.timer'); // Timer display element
 let overlay;
 
 let showCredits = false;
 let creditsOpacity = 0;
-let creditsShown = false;
+let canvasSaved = false;
 
 function setup() {
   overlay = loadImage('https://rohan-tan-bhowmik.github.io/works/art/soundbox-logo.png', img => {
@@ -41,39 +39,10 @@ function setup() {
   createCanvas(800, 600);
   background('#222');
   socket.on('drawing', handleDrawingEvent);
-
-  setInterval(updateTimer, 19); // Update the timer every 100 milliseconds
-}
-
-
-function updateTimer() {
-  // Calculate minutes, seconds, and milliseconds from timerDuration
-  let minutes = Math.floor(timerDuration / 60000);
-  let seconds = Math.floor((timerDuration % 60000) / 1000);
-  let milliseconds = Math.floor((timerDuration % 1000));
-
-  // Format timer string
-  timerDisplay.textContent = `${strPad(minutes)}:${strPad(seconds)}.${strPad(milliseconds, 3)}`;
-
-  // Decrease timer duration
-  timerDuration -= 19;
-
-  // Stop timer when it reaches 0
-  if (timerDuration < 0) {
-    clearInterval(updateTimer);
-    timerDisplay.textContent = "00:00.0000";
-
-    // Emit 'timerEnded' event with canvas data
-    socket.emit('timerEnded');
-
-    // Optionally, prompt the user to download the canvas as an image
-    // This is just to illustrate the saving action; it's not necessary for sending the data via socket
-    //saveCanvas('myDrawing', 'png');
-    setTimeout(() => {
-      showCredits = true; // After 3 seconds, start showing "hello"
-      
-    }, 1000); // Wait for 3 seconds
-  }
+  socket.on('requestCanvas', (data) => {
+    let dataUrl = canvas.toDataURL('image/png');
+    socket.emit('sendCanvas', {id: data.id, canvas: dataUrl})
+  });
 }
 
 function strPad(number, length = 2) {
@@ -83,24 +52,6 @@ function strPad(number, length = 2) {
   }
   return str;
 }
-
-function generateBrightColor() {
-  let color;
-  let attempt = 0;
-  do {
-    color = {
-      r: Math.floor(Math.random() * 256),
-      g: Math.floor(Math.random() * 256),
-      b: Math.floor(Math.random() * 256)
-    };
-    // Increment attempt to avoid potentially infinite loops in edge cases
-    attempt++;
-    // Continue if any single color component is greater than 200
-  } while (Math.max(color.r, color.g, color.b) <= 200 && attempt < 100);
-
-  return color;
-}
-
 
 function initializeUserState(userUID) {
   // Initialize or reset drawing parameters for the user
@@ -112,8 +63,8 @@ function initializeUserState(userUID) {
       thicknessChangeRate: 0,
       prevSpeed: 0,
       prevBristlePoints: [],
-      color: generateBrightColor(),
-      directionAngle: random(TWO_PI)
+      directionAngle: random(TWO_PI),
+      lastDrawTime: 0
   };
 }
 
@@ -247,6 +198,7 @@ function drawBristles(px, py, x, y, baseThickness, speed, currentState) {
 // }
 // }
 
+
 function draw(){
   if (overlay) {
     // Calculate the position to center the image
@@ -265,7 +217,7 @@ function draw(){
     fill(0, 0, 0, constrain(creditsOpacity, 0, 255)); // Use the current opacity for the text
     text("\"Wake Up\" - Rage Against the Machine", width / 2, height - 38); // Position "hello" at the bottom
     fill(0, 0, 0, constrain(creditsOpacity - 10, 0, 255)); // Use the current opacity for the text
-    text("April 6th, 2024 @ Press Play: Carol Reiley and the Robots", width / 2, height - 22); // Position "hello" at the bottom
+    text("April 5th, 2024 @ Press Play: Carol Reiley and the Robots", width / 2, height - 22); // Position "hello" at the bottom
     textSize(14); // Set a smaller text size for "hello"
     fill(0, 0, 0, constrain(creditsOpacity - 20, 0, 255)); // Use the current opacity for the text
     text("Made by Rohan Tan Bhowmik", width / 2, height - 6); // Position "hello" at the bottom
@@ -290,8 +242,10 @@ function handleDrawingEvent(data) {
 
   // Retrieve the current user's state
   let currentState = userStates[data.userUID];
+  
   console.log(currentState)
-  stroke(currentState.color.r, currentState.color.g, currentState.color.b);
+  color = data.color;
+  stroke(color.r, color.g, color.b);
 
   // Call drawBristles with user-specific bristle points
   let currentSpeed = sqrt((data.x - data.px) * (data.x - data.px) + (data.y - data.py) * (data.y - data.py));
@@ -315,7 +269,13 @@ function handleDrawingEvent(data) {
   // Smooth transition of the actual thickness towards the target thickness
   let thickness = lerp(currentState.prevThickness, targetThickness, 0.1);
 
-  if (!isFirstStroke) {
+  let currentTime = Date.now(); // Get current timestamp
+  if (currentTime - currentState.lastDrawTime > 1000) { // Check if gap is more than 1 second
+    data.isNewStroke = true; // Treat this event as starting a new stroke
+  }
+  currentState.lastDrawTime = currentTime;
+
+  if (!data.isNewStroke) {
       drawBristles(currentState.prevX, currentState.prevY, data.x, data.y, thickness, currentSpeed, currentState);
   } else {
       isFirstStroke = false;
@@ -390,3 +350,13 @@ function handleDrawingEvent(data) {
 // }
 
 
+
+window.addEventListener('orientationchange', function() {
+  var orientation = screen.orientation || window.orientation;
+  if (orientation.type === "landscape-primary" || orientation.type === "landscape-secondary") {
+    // Show message asking to rotate back to portrait
+    alert("This application is best viewed in portrait mode.");
+  } else {
+    // Adjust UI for portrait mode
+  }
+});
