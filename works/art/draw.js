@@ -167,24 +167,16 @@ function showSaveOptions() {
     let saveImgBtn = createButton('Save Image');
     saveImgBtn.parent(saveDiv);
     saveImgBtn.mousePressed(() => {
-        if (canvasDataURL) {
-            console.log("dsajfsdf");
-            // Create an <a> element to trigger the download
-            let downloadLink = createA(canvasDataURL, 'Download Image');
-            downloadLink.attribute('download', 'myCanvas.png');
-            downloadLink.hide(); // Hide the link, it's not needed to be visible
-            downloadLink.elt.click(); // Simulate a click on the link to trigger the download
-            downloadLink.remove(); // Clean up
-        }
+        
     });
         
-    // Create save GIF button (note: actual GIF saving requires additional implementation)
-    let saveGifBtn = createButton('Save GIF');
-    saveGifBtn.parent(saveDiv);
-    saveGifBtn.mousePressed(() => {
-      // Placeholder for GIF saving logic
-      console.log("Save GIF functionality not implemented.");
-    });
+    // // Create save GIF button (note: actual GIF saving requires additional implementation)
+    // let saveGifBtn = createButton('Save GIF');
+    // saveGifBtn.parent(saveDiv);
+    // saveGifBtn.mousePressed(() => {
+    //   // Placeholder for GIF saving logic
+    //   console.log("Save GIF functionality not implemented.");
+    // });
   }
   
   function toggleFullscreen() {
