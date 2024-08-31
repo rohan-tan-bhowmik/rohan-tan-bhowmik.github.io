@@ -1,8 +1,0 @@
-{
-    "name": "Drawing",
-    "short_name": "Drawing",
-    "start_url": ".",
-    "display": "standalone",
-    "orientation": "portrait"
-  }
-  
