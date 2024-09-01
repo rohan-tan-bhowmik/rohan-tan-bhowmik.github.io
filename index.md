@@ -13,7 +13,7 @@ Hello! Welcome to **Rohan Tan Bhowmik**'s website. I am a sophomore at Stanford 
 ## Academic Background
 
 - **Sep. 2023 - Present:** Stanford University (Computer Science and Electrical Engineering)
-- **Aug. 2016 - Jun. 2023:** The Harker High School
+- **Aug. 2016 - Jun. 2023:** The Harker School
 
 ---
 
