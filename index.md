@@ -25,7 +25,7 @@ I am constantly seeking to learn and develop new machine-learning techniques and
 
 ## Contact
 
-You may find me at rohan[dot]t[dot]bhowmik[at]gmail[dot]com or rbhowmik[at]stanford[dot]org.
+You may find me at rohan[dot]t[dot]bhowmik[at]gmail[dot]com or rbhowmik[at]stanford[dot]edu.
 
 <!-- ---
 
