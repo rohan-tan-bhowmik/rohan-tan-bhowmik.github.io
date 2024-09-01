@@ -4,43 +4,26 @@ permalink: /publications/index.html
 title: Publications
 ---
 
-> Update: 3rd August 2024
+<!-- > Update: 3rd August 2024
 >
-> (†: equal contribution, ~: corresponding author)
+> (†: equal contribution, ~: corresponding author) -->
+<h2>Journal papers</h2>
 
-## Conference Paper
+<ul>
+<li><b>R. T. Bhowmik</b>, Y. S. Jung, J. Aguilera, M. Prunicki, K. Nadeau, “A Multi-Modal Wildfire Prediction and Personalized Early-Warning System Based on a Novel Machine Learning Framework,” <i>Journal of Environmental Management</i>, <b>341</b>, 117908, 2023. (<a target="_blank" href='https://doi.org/10.1016/j.jenvman.2023.117908'>Link</a>)</li>
+<li><b>R. T. Bhowmik</b>, C. Kandathil, S. P. Most, “Automating the Standardized Cosmesis and Health Nasal Outcomes Survey (SCHNOS) Classification with Convolutional Neural Networks,” <i>Facial Plastic Surgery & Aesthetic Medicine</i>, PMID: 36749153, 2023. (<a target="_blank" href='https://doi.org/10.1089/fpsam.2022.0306'>Link</a>)</li>
+<li><b>R. T. Bhowmik</b>, S. P. Most, “A Personalized Respiratory Disease Exacerbation Prediction Technique Based on a Novel Spatio-Temporal Machine Learning Architecture and Local Environmental Sensor Networks,” <i>Electronics</i>, <b>11</b> (16), 2562, 2022. (<a target="_blank" href='https://doi.org/10.3390/electronics11162562'>Link</a>)</li>
+<li>R. Parthasarathy, <b>R. T. Bhowmik</b>, “Quantum Optical Convolutional Neural Network: A Novel Image Recognition Framework for Quantum Computing,” <i>IEEE Access</i>, <b>9</b>, 103337, 2021. (<a target="_blank" href='https://doi.org/10.1109/ACCESS.2021.3098775'>Link</a>)</li>
+</ul>
 
-- BLEGuard: Hybrid Detection Mechanism for Safeguarding Bluetooth Low Energy Networks Against Spoofing Attacks<br>**Hanlin Cai**†, Yuchen Fang†, Jiacheng Huang, Honglin Liao, Meng Yuan, Zhezhuang Xu~<br>The 30th ACM SIGKDD Conference on Knowledge Discovery and Data Mining. Also presented in MobiSys 2024 Poster Session.<br>Barcelona, Spain. June, 2024.
+<h2>Preprints</h2>
+<ul start="5">
+<li>R. T. Bhowmik, “A Multi-Modal Wildfire Prediction and Personalized Early-Warning System Based on a Novel Machine Learning Framework,” arXiv:2208.09079, 2022. (<a target="_blank" href='https://arxiv.org/abs/2208.09079'>Link</a>)</li>
+<li>R. T. Bhowmik, “A Multi-Modal Respiratory Disease Exacerbation Prediction Technique Based on a Spatio-Temporal Machine Learning Architecture,” arXiv:2103.03086, 2021. (<a target="_blank" href='https://arxiv.org/abs/2103.03086'>Link</a>)</li>
+<li>R. Parthasarathy, R. T. Bhowmik, “Quantum Optical Convolutional Neural Network: A Novel Image Recognition Framework for Quantum Computing,” arXiv:2012.10812, 2020. (<a target="_blank" href='https://arxiv.org/abs/2012.10812'>Link</a>)</li>
+</ul>
 
-  <br>
-
-
----
-
-## Degree Thesis
-
-- [Hybrid Detection Mechanism for Spoofing Attacks in Bluetooth Low Energy Networks](https://caihanlin.com/mypaper/thesis/UG-thesis.pdf)<br>**Hanlin Cai** (Advisor: Zhezhuang Xu). **Best Bachelor Thesis Award** (Top 1/300).<br>Proposal paper has been accepted by AAAI 2024<br>Expect to submit a long paper to KDD 2024.
-
-- [Industrial Inspection System based on Intelligent IoT and Bionic Quadruped Robot](https://caihanlin.com/mypaper/thesis/IP-report.pdf)<br>**Hanlin Cai** (Advisor: Zhezhuang Xu, Yuxiong Xia). Junior-year Intern Program.<br>Industrial Placement at China Huading Tech and IIoT Lab<br>
-
-  <br>
-
----
-
-## Manuscript
-
-TBA.
-
-<br>
-
----
-
-## Early Project
-
-- [Securing Billion Bluetooth Devices leveraging Learning-based Techniques](https://ojs.aaai.org/index.php/AAAI/article/view/30544)<br>*Final year project (FYP).*<br>**Hanlin Cai** (Advisors: Zhezhuang Xu, Tozammel Hossain)<br>AAAI Conference on Artificial Intelligence. Undergraduate Consortium.<br>Vancouver, Canada. February, 2024.
-
-- Optimizing Traffic Sign Detection System Using Deep Residual Neural Networks Combined with Analytic Hierarchy Process Model<br>*Junior-year course design.*<br>**Hanlin Cai**, Zheng Li, Jiaqi Hu, Wei Hong Lim, Sew Sun Tiang, Mastaneh Mokayef, Chin Hong Wong<br>The 28th International Conference on Artificial Life and Robotics.<br>Beppu, Japan. February, 2023.<br>Recommended for expanding publication in the Journal of Advances in Artificial Life Robotics (EI Compendex).
-
-- An IoT Garbage Monitoring System for Effective Garbage Management<br>*First-year course design.*<br>**Hanlin Cai**, Jiaqi Hu, Zheng Li, Wei Hong Lim, Mastaneh Mokayef, Chin Hong Wong<br>The 4th International Conference on Computer Engineering, Network and Intelligent Multimedia<br>Surabaya, Indonesia. November, 2022 (EI Compendex).<br>
-
-  <br>
+<h2>Conferences</h2>
+<ul start="8">
+<li>R. T. Bhowmik, “A Multi-Modal Wildfire Prediction and Personalized Early-Warning System Based on a Novel Machine Learning Framework,” Stanford BigEarth Hackathon, 2022.</li>
+</ul>
