@@ -16,12 +16,16 @@ title: Publications
 <li>R. Parthasarathy, <b>R. T. Bhowmik</b>, “Quantum Optical Convolutional Neural Network: A Novel Image Recognition Framework for Quantum Computing,” <i>IEEE Access</i>, <b>9</b>, 103337, 2021. (<a target="_blank" href='https://doi.org/10.1109/ACCESS.2021.3098775'>Link</a>)</li>
 </ul>
 
+---
+
 <h2>Preprints</h2>
 <ul start="5">
 <li>R. T. Bhowmik, “A Multi-Modal Wildfire Prediction and Personalized Early-Warning System Based on a Novel Machine Learning Framework,” arXiv:2208.09079, 2022. (<a target="_blank" href='https://arxiv.org/abs/2208.09079'>Link</a>)</li>
 <li>R. T. Bhowmik, “A Multi-Modal Respiratory Disease Exacerbation Prediction Technique Based on a Spatio-Temporal Machine Learning Architecture,” arXiv:2103.03086, 2021. (<a target="_blank" href='https://arxiv.org/abs/2103.03086'>Link</a>)</li>
 <li>R. Parthasarathy, R. T. Bhowmik, “Quantum Optical Convolutional Neural Network: A Novel Image Recognition Framework for Quantum Computing,” arXiv:2012.10812, 2020. (<a target="_blank" href='https://arxiv.org/abs/2012.10812'>Link</a>)</li>
 </ul>
+
+---
 
 <h2>Conferences</h2>
 <ul start="8">

@@ -2,40 +2,30 @@
 layout: page
 ---
 
-
 <img src="http://rohan-tan-bhowmik.github.io/rohan.jpg" class="floatpic" width="360" height="480">
 
-Hello! Welcome to **Rohan Tan Bhowmik**'s website.
+---
 
-# About Me
+Hello! Welcome to **Rohan Tan Bhowmik**'s website. I am a sophomore at Stanford University studying Computer Science and Electrical Engineering with an emphasis on Artificial Intelligence. I am also a software engineering intern at AMD's AI group. 
 
-I am an sophomore undergraduate at Stanford University studying Electrical Engineering and Computer Science with an emphasis on Artificial Intelligence. I am also a research intern at the Sean N. Parker Center of Stanford School of Medicine.
+---
 
-<!-- I am passionate about artificial intelligence, constantly seeking to learn and develop new machine-learning techniques and build applications based on them, especially in the areas of health, environment, and human-computer interaction.
-
-Outside of academics, I participate in school orchestra as a clarinetist, play tennis, and volunteer with organizations to help sensory-deficient individuals, including the Baker Institute for Children with Hearing Loss, Starkey Hearing Foundation, and VocaliD. -->
-
-<!-- I am a final-year undergrad majoring in EECS at Fuzhou University and Maynooth University (Combined Degrees). Currently, I serve as a research assistant at the IIoT-Lab, advised by [Prof. Zhezhuang Xu](https://www.researchgate.net/profile/Zhezhuang-Xu) and [Dr. Meng Yuan](https://www.researchgate.net/profile/Meng-Yuan-4). I also spent a lovely summer research program with [Prof. Pietro Liò](https://www.cl.cam.ac.uk/~pl219/) at Cambridge University. Recently, I have been selected as an **AAAI & KDD UC Scholar**. -->
-
-You may find me at **rohan[dot]t[dot]bhowmik[at]gmail[dot]com** or **rbhowmik[at]stanford[dot]org**.
-
-## Academic Background and Experience
+## Academic Background
 
 - **Sep. 2023 - Present:** Stanford University (Computer Science and Electrical Engineering)
 - **Aug. 2016 - Jun. 2023:** The Harker High School
 
-
-- **Jun. 2016 - Present:** Software Engineering Intern, AMD AI Group 
-- **2020 - 2024:** Research Intern, Stanford University School of Medicine 
 ---
 
 ## Research Interests
 
-- Machine Learning
-- Applications in Health and the Environment
-- Energy-efficient Systems
-
 I am constantly seeking to learn and develop new machine-learning techniques and build applications based on them, especially in the areas of health, environment, and human-computer interaction. I’m especially interested in brain-inspired computing for energy-efficient systems. 
+
+---
+
+## Contact
+
+You may find me at rohan[dot]t[dot]bhowmik[at]gmail[dot]com or rbhowmik[at]stanford[dot]org.
 
 <!-- ---
 
