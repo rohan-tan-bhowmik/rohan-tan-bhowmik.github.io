@@ -6,7 +6,7 @@ layout: page
 
 ---
 
-Hello! Welcome to **Rohan Tan Bhowmik**'s website. I am a sophomore at Stanford University studying Computer Science and Electrical Engineering with an emphasis on Artificial Intelligence. I am also a software engineering intern at AMD's AI group. 
+Hello! Welcome to **Rohan Tan Bhowmik**'s website. I am a junior at Stanford University studying Computer Science and Electrical Engineering with an emphasis on Artificial Intelligence. I am also the co-president of Stanford Student Robotics Club and a software engineering intern at AMD's AI group. 
 
 ---
 
