@@ -8,11 +8,11 @@ layout: home
 
 <h2>About me</h2>
 
-I am an incoming freshman at Stanford University. I am also a research intern at the Sean N. Parker Center of Stanford School of Medicine.
+I am an incoming junior at Stanford University. I am interested in developing new machine-learning techniques and build applications based on them, especially in the areas of health, environment, and human-computer interaction, especially in brain-inspired computing for energy-efficient systems.
 
-I am passionate about artificial intelligence, constantly seeking to learn and develop new machine-learning techniques and build applications based on them, especially in the areas of health, environment, and human-computer interaction.
+Since May 2025, he is the co-president of the Stanford Student Robotics club and the software lead of the Stanford RoboSub team. As a software engineering intern at AMD AI Group since June 2024, he has gained expertise in machine learning compilers and optimized model performance across diverse hardware architectures.
 
-Outside of academics, I participate in school orchestra as a clarinetist, play tennis, and volunteer with organizations to help sensory-deficient individuals, including the Baker Institute for Children with Hearing Loss, Starkey Hearing Foundation, and VocaliD.
+His other recent projects include wildfire prediction through analyzing environmental, meteorological, and geological trends, a respiratory disease exacerbation prediction system using local environmental sensor networks, and machine learning for automating patient facial condition assessment and surgery planning. He has published papers on these works in peer-reviewed journals, including the Journal of Environmental Management, Electronics, and Facial Plastic Surgery & Aesthetic Medicine, respectively.
 
 
 <h2>Contact me!</h2>
