@@ -4,6 +4,22 @@ permalink: /research/index.html
 title: Research Projects
 ---
 
+<h2>3D reconstruction of underwater features in Lake Tahoe with an autonomous underwater vehicle</h2>
+
+As software lead for RoboSub, Stanford's autonomous underwater vehicle project, I led the design and implementation of a ROS 2 based autonomy stack for a new vehicle, integrating perception, localization, and path-planning. I managed a cross-disciplinary software team of roughly 15 engineers, integrating mechanical, electrical, and research requirements into a unified, field-validated robotics platform used for both competitions and scientific missions. This work applied that platform to 3D reconstruction of underwater features in Lake Tahoe, and was presented at the International Conference on Computer Vision in 2025.
+
+Link: <a href='https://openreview.net/pdf?id=uij3sdi1pK'>Paper</a>
+
+---
+
+<h2>California Wildfire Inventory (CAWFI): an extensive dataset for predictive techniques based on artificial intelligence</h2>
+
+Due to climate change and the disruption of ecosystems worldwide, wildfires are increasingly impacting environment, infrastructure, and human lives globally. Additionally, an exacerbating climate crisis means that these losses would continue to grow if preventative measures are not implemented. Though recent advancements in artificial intelligence enable wildfire management techniques, most deployed solutions focus on detecting wildfires after ignition. The development of predictive techniques with high accuracy requires extensive datasets to train machine learning models. This paper presents the California Wildfire Inventory (CAWFI), a wildfire database of over 37 million data points for building and training wildfire prediction solutions, thereby potentially preventing megafires and flash fires by addressing them before they spark. The dataset compiles daily historical California wildfire data from 2012 to 2018 and indicator data from 2012 to 2022. The indicator data consists of leading indicators (meteorological data correlating to wildfire-prone conditions), trailing indicators (environmental data correlating to prior and early wildfire activity), and geological indicators (vegetation and elevation data dictating wildfire risk and spread patterns). CAWFI has already demonstrated success when used to train a spatio-temporal artificial intelligence model, predicting 85.7% of future wildfires larger than 300,000 acres when trained on 2012-2017 indicator data. This dataset is intended to enable wildfire prediction research and solutions as well as set a precedent for future wildfire databases in other regions.
+
+Link: <a href='https://arxiv.org/abs/2509.11015'>Preprint</a>
+
+---
+
 <h2>A multi-modal wildfire prediction and early-warning system based on a novel machine learning framework</h2>
 
 <img src='/images/research-jenvman.jpg'>

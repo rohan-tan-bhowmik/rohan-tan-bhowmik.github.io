@@ -4,6 +4,22 @@ permalink: /awards/index.html
 title: Awards
 ---
 
+<h2>Competition awards</h2>
+
+<ul>
+<li>Stanford XR Hackathon Grand Prize Winner (2023)</li>
+<li>USA Physics Olympiad, National Silver Medalist (2022, 2023)</li>
+<li>USA Astronomy & Astrophysics Olympiad, National Top 30 (2021-2022), Bronze Medalist (2023)</li>
+<li>USA Junior Math Olympiad Qualifier (2020), American Invitational Math Exam Qualifier (2020-2023)</li>
+<li>USA Computational Olympiad, Gold Level (2020-2023)</li>
+<li>USA Biology Olympiad, Semifinalist (2021-2022)</li>
+<li>TEAMS (Tests of Engineering Aptitude, Mathematics, and Science) Competition, National 2nd Place Overall (2022), California 1st Place (2020)</li>
+<li>Regional Physics Bowl, 1st Place (2021)</li>
+<li>Arete Labs Online Math Tournament, National High School Champion (2022)</li>
+</ul>
+
+---
+
 <h2>Research awards</h2>
 
 <ul>
@@ -20,15 +36,9 @@ title: Awards
 
 ---
 
-<h2>Competition awards</h2>
+<h2>Service awards</h2>
+
 <ul>
-<li> Stanford XR Hackathon Grand Prize Winner (2023)
-<li>USA Physics Olympiad, National Silver Medalist (2022, 2023)</li>
-<li>USA Astronomy & Astrophysics Olympiad, National Top 30 (2021-2022), Bronze Medalist (2023)</li>
-<li>USA Junior Math Olympiad Qualifier (2020), American Invitational Math Exam Qualifier (2020-2023)</li>
-<li>USA Computational Olympiad, Gold Level (2020-2023)</li>
-<li>USA Biology Olympiad, Semifinalist (2021-2022)</li>
-<li>TEAMS (Tests of Engineering Aptitude, Mathematics, and Science) Competition, National 2nd Place Overall (2022), California 1st Place (2020)</li>
-<li>Regional Physics Bowl, 1st Place (2021)</li>
-<li>Arete Labs Online Math Tournament, National High School Champion (2022)</li>
+<li>Ray Ng Science Bowl Volunteer Award, Stanford Linear Accelerator Center (SLAC) (2025)</li>
+<li>The President's Volunteer Service Award, Gold Level (2020, 2021, 2022)</li>
 </ul>
