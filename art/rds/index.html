@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stereogram Viewer</title>
+<style>
+  :root {
+    --bg: #f4f4f2; --panel: #ffffff; --text: #1d1d1f; --muted: #6b6b70;
+    --line: #dcdcdf; --accent: #2a6df4; --stage: #e8e8e6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #151517; --panel: #1e1e21; --text: #ececee; --muted: #9a9aa2;
+      --line: #333338; --accent: #6b9bff; --stage: #0e0e10;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--bg); color: var(--text);
+    font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    display: flex; overflow: hidden;
+  }
+  aside {
+    width: 330px; flex: none; height: 100vh; overflow-y: auto;
+    background: var(--panel); border-right: 1px solid var(--line); padding: 14px 16px 40px;
+  }
+  main {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    background: var(--stage); padding: 16px; min-width: 0;
+  }
+  canvas#out {
+    max-width: 100%; max-height: calc(100vh - 32px); aspect-ratio: 1;
+    background: #fff; box-shadow: 0 1px 8px rgba(0,0,0,.15); image-rendering: auto;
+  }
+  h1 { font-size: 16px; margin: 0 0 10px; }
+  h2 {
+    font-size: 11px; text-transform: uppercase; letter-spacing: .06em;
+    color: var(--muted); margin: 18px 0 8px; border-top: 1px solid var(--line); padding-top: 12px;
+  }
+  .row { display: grid; grid-template-columns: 108px 1fr 62px; gap: 8px; align-items: center; margin: 5px 0; }
+  .row label { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row input[type=range] { width: 100%; accent-color: var(--accent); }
+  .row input[type=number] {
+    width: 100%; background: transparent; color: var(--text);
+    border: 1px solid var(--line); border-radius: 4px; padding: 2px 4px; font: inherit;
+  }
+  .check { display: flex; align-items: center; gap: 8px; margin: 6px 0; cursor: pointer; }
+  .check input { accent-color: var(--accent); }
+  .btns { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+  button, .filebtn {
+    background: var(--bg); color: var(--text); border: 1px solid var(--line);
+    border-radius: 5px; padding: 5px 10px; font: inherit; cursor: pointer;
+  }
+  button:hover, .filebtn:hover { border-color: var(--accent); }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .filebtn input { display: none; }
+  select {
+    background: var(--bg); color: var(--text); border: 1px solid var(--line);
+    border-radius: 5px; padding: 4px 6px; font: inherit;
+  }
+  #info { color: var(--muted); font-size: 12px; margin-top: 6px; min-height: 1.4em; }
+  details summary { cursor: pointer; color: var(--muted); margin: 8px 0 4px; }
+  @media (max-width: 760px) {
+    body { flex-direction: column; overflow: auto; }
+    aside { width: 100%; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+    main { padding: 16px; }
+    canvas#out { max-height: none; width: 100%; }
+  }
+</style>
+</head>
+<body>
+<aside>
+  <h1>Random-dot stereogram</h1>
+
+  <h2>Source</h2>
+  <div class="btns">
+    <label class="filebtn">Upload image / GIF<input type="file" id="file" accept="image/*"></label>
+    <button id="genCube" class="primary">Generate cube</button>
+  </div>
+  <div id="info"></div>
+  <div id="live" style="color: var(--muted); font-size: 12px"></div>
+  <details id="cubeBox" open>
+    <summary>Cube settings</summary>
+    <div id="cubeParams"></div>
+  </details>
+
+  <h2>Dots</h2>
+  <div id="dotParams"></div>
+  <label class="check"><input type="checkbox" id="newDots"> New random dots every frame</label>
+  <label class="check"><input type="checkbox" id="invert"> Invert mask</label>
+  <label class="check"><input type="checkbox" id="multiply"> Multiply blend (overlaps go dark)</label>
+  <div class="btns"><button id="reseed">Re-roll dots</button></div>
+
+  <h2>Playback</h2>
+  <div class="btns">
+    <button id="play">Pause</button>
+    <button id="prev">◀</button>
+    <button id="next">▶</button>
+    <select id="view">
+      <option value="stereo">Stereogram</option>
+      <option value="mask">Mask</option>
+      <option value="source">Source</option>
+    </select>
+  </div>
+  <div id="playParams"></div>
+  <div class="btns">
+    <button id="png">Save PNG</button>
+    <button id="gif">Save GIF</button>
+    <button id="rec">Record WebM (1 loop)</button>
+  </div>
+</aside>
+<main><canvas id="out"></canvas></main>
+
+<script>
+const $ = id => document.getElementById(id);
+const P = {};
+const setters = {};
+
+function addParam(parent, key, label, min, max, step, val, onChange) {
+  const row = document.createElement('div');
+  row.className = 'row';
+  row.innerHTML = `<label title="${label}">${label}</label>
+    <input type="range" min="${min}" max="${max}" step="${step}" value="${val}">
+    <input type="number" min="${min}" max="${max}" step="${step}" value="${val}">`;
+  const [range, num] = row.querySelectorAll('input');
+  P[key] = +val;
+  const set = v => { P[key] = +v; range.value = v; num.value = v; onChange && onChange(); };
+  setters[key] = set;
+  range.addEventListener('input', () => set(range.value));
+  num.addEventListener('change', () => set(num.value));
+  parent.appendChild(row);
+}
+
+// ---- State ----------------------------------------------------------------
+let frames = [];        // [{lum: Uint8Array, img: canvas, dur: ms}]
+let maskSize = 0;       // width/height of each lum array
+let srcKind = null;     // 'cube' | 'file'
+let ptsX, ptsY;
+let frameIdx = 0, playing = true, dirty = true, lastSwitch = 0;
+
+const out = $('out');
+const ctx = out.getContext('2d');
+
+// ---- Dots -----------------------------------------------------------------
+function regenPoints() {
+  const n = P.count, r = P.res;
+  ptsX = new Float32Array(n); ptsY = new Float32Array(n);
+  for (let i = 0; i < n; i++) { ptsX[i] = Math.random() * r; ptsY[i] = Math.random() * r; }
+  dirty = true;
+}
+
+const D = () => { dirty = true; };
+addParam($('dotParams'), 'res', 'Resolution', 256, 2560, 64, 1920, () => { regenPoints(); });
+addParam($('dotParams'), 'count', 'Points', 100, 30000, 100, 5000, () => { regenPoints(); });
+addParam($('dotParams'), 'radius', 'Dot radius', 1, 20, 0.5, 4, D);
+addParam($('dotParams'), 'thresh', 'Threshold', 0, 255, 1, 127, D);
+addParam($('dotParams'), 'oxb', 'Offset X base', -200, 200, 1, 15, D);
+addParam($('dotParams'), 'oyb', 'Offset Y base', -200, 200, 1, 0, D);
+addParam($('dotParams'), 'oxa', 'Offset X add', -300, 300, 1, 100, D);
+addParam($('dotParams'), 'oya', 'Offset Y add', -300, 300, 1, 0, D);
+addParam($('playParams'), 'fps', 'FPS (0 = source)', 0, 60, 1, 0, null);
+['invert', 'multiply'].forEach(id => $(id).addEventListener('change', D));
+$('view').addEventListener('change', D);
+$('reseed').onclick = regenPoints;
+
+// ---- Minimal GIF decoder (every frame, composited with disposal) --------------
+//@gif-start
+function lzw(minSize, data, npix) {
+  const out = new Uint8Array(npix);
+  const clear = 1 << minSize, eoi = clear + 1;
+  const prefix = new Int16Array(4096), suffix = new Uint8Array(4096), stack = new Uint8Array(4097);
+  for (let i = 0; i < clear; i++) suffix[i] = i;
+  let size = minSize + 1, mask = (1 << size) - 1, next = eoi + 1, prev = -1, first = 0;
+  let bits = 0, cur = 0, op = 0, p = 0;
+  while (op < npix) {
+    while (bits < size && p < data.length) { cur |= data[p++] << bits; bits += 8; }
+    if (bits < size) break;
+    const code = cur & mask; cur >>>= size; bits -= size;
+    if (code === clear) { size = minSize + 1; mask = (1 << size) - 1; next = eoi + 1; prev = -1; continue; }
+    if (code === eoi) break;
+    if (prev === -1) { out[op++] = suffix[code]; prev = first = code; continue; }
+    let sp = 0, c = code;
+    if (code >= next) { stack[sp++] = first; c = prev; }   // KwKwK case
+    while (c >= clear) { stack[sp++] = suffix[c]; c = prefix[c]; }
+    stack[sp++] = first = c;
+    while (sp && op < npix) out[op++] = stack[--sp];
+    if (next < 4096) {
+      prefix[next] = prev; suffix[next] = first; next++;
+      if (next > mask && size < 12) { size++; mask = (1 << size) - 1; }
+    }
+    prev = code;
+  }
+  return out;
+}
+
+function decodeGif(buf) {
+  const b = new Uint8Array(buf);
+  if (String.fromCharCode(...b.subarray(0, 3)) !== 'GIF') throw new Error('not a GIF');
+  let p = 6;
+  const W = b[p] | b[p + 1] << 8, H = b[p + 2] | b[p + 3] << 8, pk = b[p + 4];
+  p += 7;
+  let gct = null;
+  if (pk & 0x80) { const n = 3 << ((pk & 7) + 1); gct = b.subarray(p, p + n); p += n; }
+  const readSub = () => {
+    const parts = []; let len = 0;
+    while (p < b.length && b[p]) { const n = b[p++]; parts.push(b.subarray(p, p + n)); p += n; len += n; }
+    p++;
+    const d = new Uint8Array(len); let o = 0;
+    for (const x of parts) { d.set(x, o); o += x.length; }
+    return d;
+  };
+  const screen = new Uint8ClampedArray(W * H * 4);
+  const frames = [];
+  let delay = 0, disp = 0, trans = -1;
+  while (p < b.length) {
+    const t = b[p++];
+    if (t === 0x3B) break;
+    if (t === 0x21) {
+      const label = b[p++];
+      if (label === 0xF9) { const f = b[p + 1]; disp = (f >> 2) & 7; delay = (b[p + 2] | b[p + 3] << 8) * 10; trans = f & 1 ? b[p + 4] : -1; }
+      readSub();
+    } else if (t === 0x2C) {
+      const x0 = b[p] | b[p + 1] << 8, y0 = b[p + 2] | b[p + 3] << 8, w = b[p + 4] | b[p + 5] << 8, h = b[p + 6] | b[p + 7] << 8, ip = b[p + 8];
+      p += 9;
+      let ct = gct;
+      if (ip & 0x80) { const n = 3 << ((ip & 7) + 1); ct = b.subarray(p, p + n); p += n; }
+      const minSize = b[p++];
+      const idx = lzw(minSize, readSub(), w * h);
+      const rows = [];
+      if (ip & 0x40) { for (const [s, d] of [[0, 8], [4, 8], [2, 4], [1, 2]]) for (let y = s; y < h; y += d) rows.push(y); }
+      else for (let y = 0; y < h; y++) rows.push(y);
+      const saved = disp === 3 ? screen.slice() : null;
+      for (let r = 0; r < h; r++) {
+        const y = y0 + rows[r]; if (y >= H) continue;
+        for (let c = 0; c < w; c++) {
+          const x = x0 + c, ci = idx[r * w + c];
+          if (x >= W || ci === trans) continue;
+          const o = (y * W + x) * 4;
+          screen[o] = ct[ci * 3]; screen[o + 1] = ct[ci * 3 + 1]; screen[o + 2] = ct[ci * 3 + 2]; screen[o + 3] = 255;
+        }
+      }
+      frames.push({ data: new ImageData(screen.slice(), W, H), dur: delay > 10 ? delay : 100 });
+      if (disp === 2) {
+        for (let y = y0; y < Math.min(H, y0 + h); y++) screen.fill(0, (y * W + x0) * 4, (y * W + Math.min(W, x0 + w)) * 4);
+      } else if (disp === 3) screen.set(saved);
+      delay = 0; disp = 0; trans = -1;
+    } else break;
+  }
+  if (!frames.length) throw new Error('no frames in GIF');
+  return frames;
+}
+//@gif-end
+
+// ---- Source -> luminance masks --------------------------------------------
+// Center-crop each frame to a square and keep its grayscale at <= 1024px.
+// Thresholding happens at sample time, so moving the threshold slider is instant.
+function setFrames(list) {   // list: [{img: CanvasImageSource, w, h, dur}]
+  const side = Math.min(list[0].w, list[0].h);
+  maskSize = Math.min(side, 1024);
+  const c = document.createElement('canvas');
+  c.width = c.height = maskSize;
+  const cx = c.getContext('2d', { willReadFrequently: true });
+  frames = list.map(f => {
+    const s = Math.min(f.w, f.h);
+    cx.fillStyle = '#000'; cx.fillRect(0, 0, maskSize, maskSize);
+    cx.drawImage(f.img, (f.w - s) / 2, (f.h - s) / 2, s, s, 0, 0, maskSize, maskSize);
+    const d = cx.getImageData(0, 0, maskSize, maskSize).data;
+    const lum = new Uint8Array(maskSize * maskSize);
+    for (let i = 0, j = 0; i < lum.length; i++, j += 4)
+      lum[i] = (d[j] * 299 + d[j + 1] * 587 + d[j + 2] * 114) / 1000;
+    const img = document.createElement('canvas');
+    img.width = img.height = maskSize;
+    img.getContext('2d').drawImage(c, 0, 0);
+    return { lum, img, dur: f.dur || 100 };
+  });
+  frameIdx = 0; dirty = true;
+  const total = frames.reduce((a, f) => a + f.dur, 0);
+  $('info').textContent = `${frames.length} frame${frames.length > 1 ? 's' : ''}, ${side}px crop, ${(total / 1000).toFixed(2)}s loop`;
+}
+
+async function loadFile(file) {
+  srcKind = 'file';
+  clearTimeout(cubeTimer);
+  $('cubeBox').open = false;
+  $('info').textContent = 'Decoding…';
+  try {
+    if (file.type === 'image/gif' || /\.gif$/i.test(file.name)) {
+      const list = decodeGif(await file.arrayBuffer()).map(f => {
+        const c = document.createElement('canvas');
+        c.width = f.data.width; c.height = f.data.height;
+        c.getContext('2d').putImageData(f.data, 0, 0);
+        return { img: c, w: c.width, h: c.height, dur: f.dur };
+      });
+      setFrames(list);
+    } else {
+      const bmp = await createImageBitmap(file);
+      setFrames([{ img: bmp, w: bmp.width, h: bmp.height, dur: 100 }]);
+    }
+  } catch (e) {
+    $('info').textContent = 'Could not read that file: ' + e.message;
+  }
+}
+$('file').addEventListener('change', e => e.target.files[0] && loadFile(e.target.files[0]));
+document.body.addEventListener('dragover', e => e.preventDefault());
+document.body.addEventListener('drop', e => {
+  e.preventDefault();
+  const f = e.dataTransfer.files[0];
+  if (f) loadFile(f);
+});
+
+// ---- Cube generator (port of cube.py, black-and-white mode) ----------------
+let cubeTimer;
+const C = () => { if (srcKind === 'cube') { clearTimeout(cubeTimer); cubeTimer = setTimeout(genCube, 120); } };
+const cp = $('cubeParams');
+addParam(cp, 'cSize', 'Size', 128, 1024, 32, 512, C);
+addParam(cp, 'cFrames', 'Frames', 1, 180, 1, 60, C);
+addParam(cp, 'cFps', 'FPS', 1, 60, 1, 30, C);
+addParam(cp, 'yaw0', 'Yaw start°', -180, 180, 1, 0, C);
+addParam(cp, 'pitch0', 'Pitch start°', -90, 90, 1, 25, C);
+addParam(cp, 'roll0', 'Roll start°', -180, 180, 1, 0, C);
+addParam(cp, 'yawV', 'Yaw °/s', -720, 720, 15, 180, C);
+addParam(cp, 'pitchV', 'Pitch °/s', -720, 720, 15, 0, C);
+addParam(cp, 'rollV', 'Roll °/s', -720, 720, 15, 0, C);
+addParam(cp, 'camDist', 'Camera dist', 2.5, 15, 0.1, 5, C);
+addParam(cp, 'focal', 'Zoom', 0.3, 3, 0.05, 1.1, C);
+addParam(cp, 'edge', 'Edge thickness', 0, 30, 1, 6, C);
+
+const VERTS = [];
+for (const x of [-1, 1]) for (const y of [-1, 1]) for (const z of [-1, 1]) VERTS.push([x, y, z]);
+const FACES = [[0,1,3,2],[4,5,7,6],[0,1,5,4],[2,3,7,6],[0,2,6,4],[1,3,7,5]];
+
+function genCube() {
+  srcKind = 'cube';
+  const S = P.cSize, F = P.cFrames, fps = P.cFps, focal = S * P.focal, cam = P.camDist;
+  const rad = Math.PI / 180, list = [];
+  for (let i = 0; i < F; i++) {
+    const t = i / fps;
+    const yaw = (P.yaw0 + P.yawV * t) * rad, pitch = (P.pitch0 + P.pitchV * t) * rad, roll = (P.roll0 + P.rollV * t) * rad;
+    // R = Rz(roll) · Rx(pitch) · Ry(yaw), applied right to left
+    const v = VERTS.map(([x, y, z]) => {
+      let c = Math.cos(yaw), s = Math.sin(yaw);
+      [x, z] = [c * x + s * z, -s * x + c * z];
+      c = Math.cos(pitch); s = Math.sin(pitch);
+      [y, z] = [c * y - s * z, s * y + c * z];
+      c = Math.cos(roll); s = Math.sin(roll);
+      [x, y] = [c * x - s * y, s * x + c * y];
+      return [x, y, z];
+    });
+    const p2 = v.map(([x, y, z]) => [S / 2 + focal * x / (cam - z), S / 2 - focal * y / (cam - z)]);
+    const c = document.createElement('canvas');
+    c.width = c.height = S;
+    const g = c.getContext('2d');
+    g.fillStyle = '#000'; g.fillRect(0, 0, S, S);
+    const visible = [];
+    for (const face of FACES) {
+      const ctr = [0, 1, 2].map(k => face.reduce((a, vi) => a + v[vi][k], 0) / 4);
+      // normal points along ctr (cube centered at origin); camera at (0,0,cam)
+      if (-ctr[0] * ctr[0] - ctr[1] * ctr[1] + (cam - ctr[2]) * ctr[2] <= 0) continue;
+      visible.push(face);
+      g.fillStyle = '#fff';
+      g.beginPath();
+      face.forEach((vi, k) => k ? g.lineTo(...p2[vi]) : g.moveTo(...p2[vi]));
+      g.closePath(); g.fill();
+    }
+    if (P.edge > 0) {
+      g.strokeStyle = '#000'; g.lineWidth = P.edge; g.lineJoin = 'round';
+      for (const face of visible) {
+        g.beginPath();
+        face.forEach((vi, k) => k ? g.lineTo(...p2[vi]) : g.moveTo(...p2[vi]));
+        g.closePath(); g.stroke();
+      }
+    }
+    list.push({ img: c, w: S, h: S, dur: 1000 / fps });
+  }
+  setFrames(list);
+  $('cubeBox').open = true;
+}
+$('genCube').onclick = genCube;
+
+// ---- Rendering --------------------------------------------------------------
+function render() {
+  const R = P.res;
+  if (out.width !== R) { out.width = out.height = R; }
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, R, R);
+  if (!frames.length) return;
+  const f = frames[frameIdx], view = $('view').value;
+  const thr = P.thresh, inv = $('invert').checked;
+
+  if (view === 'source') { ctx.drawImage(f.img, 0, 0, R, R); return; }
+  if (view === 'mask') {
+    const id = new ImageData(maskSize, maskSize), d = id.data;
+    for (let i = 0, j = 0; i < f.lum.length; i++, j += 4) {
+      const on = (f.lum[i] > thr) !== inv;
+      d[j] = d[j + 1] = d[j + 2] = on ? 255 : 0; d[j + 3] = 255;
+    }
+    const c = document.createElement('canvas'); c.width = c.height = maskSize;
+    c.getContext('2d').putImageData(id, 0, 0);
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(c, 0, 0, R, R);
+    ctx.imageSmoothingEnabled = true;
+    return;
+  }
+
+  const n = ptsX.length, r = P.radius, scale = maskSize / R, M = maskSize, lum = f.lum;
+  const dx0 = P.oxb, dy0 = P.oyb, dx1 = P.oxb + P.oxa, dy1 = P.oyb + P.oya;
+  if ($('multiply').checked) ctx.globalCompositeOperation = 'multiply';
+
+  ctx.fillStyle = '#ff0000';
+  ctx.beginPath();
+  for (let i = 0; i < n; i++) { ctx.moveTo(ptsX[i] + r, ptsY[i]); ctx.arc(ptsX[i], ptsY[i], r, 0, 6.2832); }
+  ctx.fill();
+
+  ctx.fillStyle = '#00ffff';
+  ctx.beginPath();
+  for (let i = 0; i < n; i++) {
+    const mx = Math.min(M - 1, (ptsX[i] * scale) | 0), my = Math.min(M - 1, (ptsY[i] * scale) | 0);
+    const inside = (lum[my * M + mx] > thr) !== inv;
+    const x = ptsX[i] + (inside ? dx1 : dx0), y = ptsY[i] + (inside ? dy1 : dy0);
+    ctx.moveTo(x + r, y); ctx.arc(x, y, r, 0, 6.2832);
+  }
+  ctx.fill();
+}
+
+function step(dir) {
+  if (!frames.length) return;
+  frameIdx = (frameIdx + dir + frames.length) % frames.length;
+  if ($('newDots').checked) regenPoints();
+  dirty = true;
+}
+
+function loop(now) {
+  if (playing && frames.length > 1) {
+    const dur = P.fps > 0 ? 1000 / P.fps : frames[frameIdx].dur;
+    if (now - lastSwitch >= dur) { lastSwitch = now; step(1); onFrameAdvance(); }
+  } else if (playing && frames.length === 1 && $('newDots').checked) {
+    const dur = P.fps > 0 ? 1000 / P.fps : 100;
+    if (now - lastSwitch >= dur) { lastSwitch = now; regenPoints(); }
+  }
+  if (dirty) { dirty = false; render(); }
+  requestAnimationFrame(loop);
+}
+
+$('play').onclick = () => { playing = !playing; $('play').textContent = playing ? 'Pause' : 'Play'; };
+$('prev').onclick = () => step(-1);
+$('next').onclick = () => step(1);
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' && e.target.type === 'number') return;
+  if (e.key === ' ') { e.preventDefault(); $('play').click(); }
+  if (e.key === 'ArrowRight') step(1);
+  if (e.key === 'ArrowLeft') step(-1);
+});
+
+$('png').onclick = () => {
+  const a = document.createElement('a');
+  a.download = `stereogram_${frameIdx}.png`;
+  a.href = out.toDataURL('image/png');
+  a.click();
+};
+
+// ---- GIF export of one full loop ----------------------------------------------
+// Every stereogram pixel has G == B (white, red, cyan, black and their blends),
+// so a fixed 256-color palette of 16 red levels x 16 green/blue levels is near-exact.
+const GIF_PAL = new Uint8Array(768);
+for (let i = 0; i < 256; i++) {
+  GIF_PAL[i * 3] = (i >> 4) * 17;
+  GIF_PAL[i * 3 + 1] = GIF_PAL[i * 3 + 2] = (i & 15) * 17;
+}
+const lzwCode = new Int16Array(1 << 20), lzwStamp = new Int32Array(1 << 20);
+let lzwGen = 0;
+
+function lzwEncode(px) {   // 8-bit indices -> GIF LZW bytes
+  const buf = new Uint8Array(px.length * 2 + 16);
+  let bp = 0, cur = 0, bits = 0, size = 9, next = 258, gen = ++lzwGen;
+  const emit = c => { cur |= c << bits; bits += size; while (bits >= 8) { buf[bp++] = cur & 255; cur >>>= 8; bits -= 8; } };
+  emit(256);
+  let prefix = px[0];
+  for (let i = 1; i < px.length; i++) {
+    const k = px[i], key = prefix << 8 | k;
+    if (lzwStamp[key] === gen) { prefix = lzwCode[key]; continue; }
+    emit(prefix);
+    if (next < 4096) {
+      lzwStamp[key] = gen; lzwCode[key] = next++;
+      if (next > (1 << size) && size < 12) size++;
+    } else {   // table full: reset
+      emit(256); gen = ++lzwGen; next = 258; size = 9;
+    }
+    prefix = k;
+  }
+  emit(prefix); emit(257);
+  if (bits > 0) buf[bp++] = cur & 255;
+  return buf.subarray(0, bp);
+}
+
+function gifFrameBytes(rgba, W, H, delayMs) {
+  const px = new Uint8Array(W * H);
+  for (let i = 0, j = 0; i < px.length; i++, j += 4) px[i] = (rgba[j] & 0xF0) | (rgba[j + 1] >> 4);
+  const data = lzwEncode(px);
+  const cs = Math.max(2, Math.round(delayMs / 10));
+  const out = new Uint8Array(8 + 10 + 1 + data.length + Math.ceil(data.length / 255) + 1);
+  let o = 0;
+  out.set([0x21, 0xF9, 4, 0, cs & 255, cs >> 8, 0, 0], o); o += 8;
+  out.set([0x2C, 0, 0, 0, 0, W & 255, W >> 8, H & 255, H >> 8, 0], o); o += 10;
+  out[o++] = 8;
+  for (let i = 0; i < data.length; i += 255) {
+    const n = Math.min(255, data.length - i);
+    out[o++] = n; out.set(data.subarray(i, i + n), o); o += n;
+  }
+  out[o++] = 0;
+  return out.subarray(0, o);
+}
+
+let exportingGif = false;
+$('gif').onclick = async () => {
+  if (exportingGif || !frames.length) return;
+  exportingGif = true;
+  const btn = $('gif'), wasPlaying = playing, view = $('view').value, startIdx = frameIdx;
+  playing = false;
+  $('view').value = 'stereo';
+  const W = P.res, H = P.res;
+  const n = frames.length === 1 && $('newDots').checked ? 30 : frames.length;
+  const parts = [new Uint8Array([71, 73, 70, 56, 57, 97, W & 255, W >> 8, H & 255, H >> 8, 0xF7, 0, 0]), GIF_PAL,
+    new Uint8Array([0x21, 0xFF, 11, ...'NETSCAPE2.0'.split('').map(c => c.charCodeAt(0)), 3, 1, 0, 0, 0])];
+  for (let i = 0; i < n; i++) {
+    btn.textContent = `GIF ${i + 1}/${n}…`;
+    await new Promise(r => setTimeout(r));
+    frameIdx = i % frames.length;
+    if (i > 0 && $('newDots').checked) regenPoints();
+    render();
+    const delay = P.fps > 0 ? 1000 / P.fps : frames.length === 1 ? 100 : frames[frameIdx].dur;
+    parts.push(gifFrameBytes(ctx.getImageData(0, 0, W, H).data, W, H, delay));
+  }
+  parts.push(new Uint8Array([0x3B]));
+  const a = document.createElement('a');
+  a.download = 'stereogram.gif';
+  a.href = URL.createObjectURL(new Blob(parts, { type: 'image/gif' }));
+  a.click();
+  $('view').value = view; frameIdx = startIdx; playing = wasPlaying; dirty = true;
+  btn.textContent = 'Save GIF';
+  exportingGif = false;
+};
+
+// ---- WebM recording of one full loop ------------------------------------------
+let recorder = null, recFramesLeft = 0;
+function onFrameAdvance() {
+  if (recorder && --recFramesLeft <= 0) { render(); setTimeout(() => recorder && recorder.stop(), 50); }
+}
+$('rec').onclick = () => {
+  if (recorder || !frames.length) return;
+  const stream = out.captureStream(60);
+  const type = ['video/webm;codecs=vp9', 'video/webm'].find(t => MediaRecorder.isTypeSupported(t)) || '';
+  recorder = new MediaRecorder(stream, type ? { mimeType: type, videoBitsPerSecond: 12e6 } : {});
+  const chunks = [];
+  recorder.ondataavailable = e => chunks.push(e.data);
+  recorder.onstop = () => {
+    const a = document.createElement('a');
+    a.download = 'stereogram.webm';
+    a.href = URL.createObjectURL(new Blob(chunks, { type: 'video/webm' }));
+    a.click();
+    recorder = null;
+    $('rec').textContent = 'Record WebM (1 loop)';
+  };
+  frameIdx = 0; dirty = true; playing = true; $('play').textContent = 'Pause';
+  recFramesLeft = Math.max(frames.length, 1);
+  if (frames.length === 1) setTimeout(() => recorder && recorder.stop(), 2000);
+  recorder.start();
+  $('rec').textContent = 'Recording…';
+};
+
+// ---- Live settings from stereogram.py / cube.py (via serve.py) ----------------
+// Values are re-applied only when a .py file changes, so slider tweaks stick until then.
+const ST_MAP = { res_x: 'res', pts_num: 'count', radius: 'radius', thresh: 'thresh',
+  offset_x_base: 'oxb', offset_y_base: 'oyb', offset_x_add: 'oxa', offset_y_add: 'oya' };
+const CUBE_MAP = { SIZE: 'cSize', FPS: 'cFps', YAW_0: 'yaw0', PITCH_0: 'pitch0', ROLL_0: 'roll0',
+  YAW_VEL: 'yawV', PITCH_VEL: 'pitchV', ROLL_VEL: 'rollV', CAM_DIST: 'camDist', EDGE_THICKNESS: 'edge' };
+let stKey = null, cubeKey = null, srcKey = null;
+
+function applyMap(vals, map) {
+  for (const [name, key] of Object.entries(map))
+    if (typeof vals[name] === 'number') setters[key](vals[name]);
+}
+
+async function loadUrl(path) {
+  const blob = await (await fetch(path, { cache: 'no-store' })).blob();
+  await loadFile(new File([blob], path, { type: blob.type }));
+  $('info').textContent += ` — ${path} (in_path)`;
+}
+
+async function pollConfig() {
+  let cfg;
+  try { cfg = await (await fetch('config', { cache: 'no-store' })).json(); }
+  catch { return false; }   // opened without serve.py: no live settings
+  const s = cfg.stereogram, c = cfg.cube;
+  const sk = JSON.stringify(s);
+  if (sk !== stKey) {
+    stKey = sk;
+    applyMap(s, ST_MAP);
+    if (typeof s.new_dots_each_frame === 'boolean') $('newDots').checked = s.new_dots_each_frame;
+  }
+  const ck = JSON.stringify(c);
+  if (ck !== cubeKey) {
+    cubeKey = ck;
+    applyMap(c, CUBE_MAP);   // regenerates the cube if it's the current source
+    if (c.DURATION && c.FPS) setters.cFrames(Math.max(1, Math.round(c.DURATION * c.FPS)));
+    if (c.FOCAL && c.SIZE) setters.focal(+(c.FOCAL / c.SIZE).toFixed(3));
+  }
+  const rk = JSON.stringify([cfg.source, cfg.source_mtime]);
+  if (rk !== srcKey) {
+    srcKey = rk;
+    if (cfg.source) await loadUrl(cfg.source); else genCube();
+  }
+  $('live').textContent = 'Live: following stereogram.py and cube.py';
+  return true;
+}
+
+regenPoints();
+requestAnimationFrame(loop);
+pollConfig().then(ok => {
+  if (ok) setInterval(pollConfig, 1000);
+  else {
+    genCube();
+    if (location.protocol === 'file:' || location.hostname === 'localhost')
+      $('live').textContent = 'Run python3 serve.py to follow the .py files';
+  }
+});
+</script>
+</body>
+</html>
