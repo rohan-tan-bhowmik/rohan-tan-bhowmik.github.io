@@ -46,6 +46,13 @@
     width: 100%; background: transparent; color: var(--text);
     border: 1px solid var(--line); border-radius: 4px; padding: 2px 4px; font: inherit;
   }
+  .nrow { display: grid; grid-template-columns: 140px 1fr; gap: 8px; align-items: center; margin: 5px 0; }
+  .nrow label { color: var(--muted); }
+  .nrow input, .nrow select {
+    width: 100%; background: transparent; color: var(--text); font: inherit;
+    border: 1px solid var(--line); border-radius: 4px; padding: 3px 5px;
+  }
+  .nrow select { background: var(--bg); }
   .check { display: flex; align-items: center; gap: 8px; margin: 6px 0; cursor: pointer; }
   .check input { accent-color: var(--accent); }
   .btns { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
@@ -109,14 +116,24 @@
   <label class="check"><input type="checkbox" id="multiply"> Multiply blend (overlaps go dark)</label>
   <div class="btns"><button id="reseed">Re-roll dots</button></div>
 
+  <h2>Your screen</h2>
+  <div class="nrow"><label>Model</label>
+    <select id="preset">
+      <option value="">Custom</option>
+      <option value="14.2,3024,1964">MacBook Pro 14″</option>
+      <option value="16.2,3456,2234">MacBook Pro 16″</option>
+      <option value="13.6,2560,1664">MacBook Air 13″ (M2 and later)</option>
+      <option value="15.3,2880,1864">MacBook Air 15″</option>
+      <option value="13.3,2560,1600">MacBook 13.3″ (older Air / Pro)</option>
+    </select></div>
+  <div id="vaParams"></div>
+  <div class="btns"><button id="detect" title="Reads the resolution from this browser (correct at the default display scaling)">Detect resolution</button></div>
+  <div id="pxInfo" style="color: var(--muted); font-size: 12px"></div>
+
   <h2>Disparity</h2>
   <div class="btns"><button id="showVA">Show disparity</button></div>
   <label class="check" title="Draw one image pixel per physical screen pixel, so Offset X add = disparity in screen pixels">
     <input type="checkbox" id="native"> Show at 1:1 screen pixels</label>
-  <details>
-    <summary>Screen and viewing distance</summary>
-    <div id="vaParams"></div>
-  </details>
 
   <h2>Playback</h2>
   <div class="btns">
@@ -472,10 +489,43 @@ function render() {
 // Disparity = the shape's extra offset (Offset X add), converted to physical screen pixels,
 // then to cm via the screen's pixel pitch, then to an angle at the viewing distance.
 const va = size => 180 / Math.PI * (2 * Math.atan(size / (2 * P.dist)));
-addParam($('vaParams'), 'diag', 'Screen diagonal (in)', 10, 40, 0.1, 14.2, updateVA);
-addParam($('vaParams'), 'scrW', 'Screen width (px)', 640, 7680, 1, 3024, updateVA);
-addParam($('vaParams'), 'scrH', 'Screen height (px)', 480, 4320, 1, 1964, updateVA);
-addParam($('vaParams'), 'dist', 'Distance (cm)', 20, 150, 1, 50, updateVA);
+const SCREEN_KEYS = ['diag', 'scrW', 'scrH', 'dist'];
+let savedScreen = {};
+try { savedScreen = JSON.parse(localStorage.getItem('rds-screen')) || {}; } catch { }
+
+function addNum(parent, key, label, val, step) {
+  const row = document.createElement('div');
+  row.className = 'nrow';
+  row.innerHTML = `<label>${label}</label><input type="number" min="0" step="${step}" value="${val}">`;
+  const inp = row.querySelector('input');
+  P[key] = +val;
+  setters[key] = v => { P[key] = +v; inp.value = v; screenChanged(); };
+  inp.addEventListener('input', () => { if (+inp.value > 0) { P[key] = +inp.value; screenChanged(); } });
+  parent.appendChild(row);
+}
+addNum($('vaParams'), 'diag', 'Diagonal (inches)', savedScreen.diag ?? 14.2, 0.1);
+addNum($('vaParams'), 'scrW', 'Resolution width (px)', savedScreen.scrW ?? 3024, 1);
+addNum($('vaParams'), 'scrH', 'Resolution height (px)', savedScreen.scrH ?? 1964, 1);
+addNum($('vaParams'), 'dist', 'Viewing distance (cm)', savedScreen.dist ?? 50, 1);
+
+function syncPreset() {
+  const cur = [P.diag, P.scrW, P.scrH].join(',');
+  $('preset').value = [...$('preset').options].some(o => o.value === cur) ? cur : '';
+}
+function screenChanged() {
+  syncPreset();
+  try { localStorage.setItem('rds-screen', JSON.stringify(Object.fromEntries(SCREEN_KEYS.map(k => [k, P[k]])))); } catch { }
+  updateVA();
+}
+$('preset').addEventListener('change', () => {
+  if (!$('preset').value) return;
+  const [d, w, h] = $('preset').value.split(',').map(Number);
+  setters.diag(d); setters.scrW(w); setters.scrH(h);
+});
+$('detect').onclick = () => {
+  setters.scrW(Math.round(screen.width * devicePixelRatio));
+  setters.scrH(Math.round(screen.height * devicePixelRatio));
+};
 let vaShown = false;
 const toggleVA = () => { vaShown = !vaShown; updateVA(); };
 $('showVA').onclick = toggleVA;
@@ -488,11 +538,14 @@ function updateVA() {
   document.body.classList.toggle('native', native);
   out.style.width = native ? `${P.res / devicePixelRatio}px` : '';
 
+  const pitch = P.diag * 2.54 / Math.hypot(P.scrW, P.scrH);          // cm per physical pixel
+  $('pxInfo').textContent = `1 screen pixel = ${pitch.toFixed(4)} cm = ${(va(pitch) * 3600).toFixed(1)} arcseconds at ${P.dist} cm.` +
+    (P.diag < 10 ? ' Use a screen of at least 10 inches.' : '');
+
   const box = $('vaBox');
   box.hidden = !vaShown;
   $('showVA').textContent = vaShown ? 'Hide disparity' : 'Show disparity';
   if (box.hidden) return;
-  const pitch = P.diag * 2.54 / Math.hypot(P.scrW, P.scrH);          // cm per physical pixel
   const scrPerImg = out.getBoundingClientRect().width * devicePixelRatio / P.res;
   const px = Math.abs(P.oxa) * scrPerImg;                               // disparity in screen pixels
   const arcsec = va(px * pitch) * 3600;
@@ -696,6 +749,7 @@ async function pollConfig() {
 }
 
 regenPoints();
+syncPreset();
 requestAnimationFrame(loop);
 pollConfig().then(ok => {
   if (ok) setInterval(pollConfig, 1000);
