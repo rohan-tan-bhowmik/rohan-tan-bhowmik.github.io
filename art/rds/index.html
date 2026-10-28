@@ -62,6 +62,18 @@
   }
   #info { color: var(--muted); font-size: 12px; margin-top: 6px; min-height: 1.4em; }
   details summary { cursor: pointer; color: var(--muted); margin: 8px 0 4px; }
+  main { position: relative; }
+  #vaBox {
+    position: absolute; top: 16px; left: 16px; max-width: calc(100% - 32px);
+    background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 6px;
+    padding: 10px 12px; font-size: 12px; box-shadow: 0 2px 10px rgba(0,0,0,.15); overflow-x: auto;
+  }
+  #vaBox[hidden] { display: none; }
+  #vaBox table { border-collapse: collapse; }
+  #vaBox td, #vaBox th { padding: 2px 8px 2px 0; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  #vaBox td:first-child, #vaBox th:first-child { text-align: left; }
+  #vaBox th { color: var(--muted); font-weight: normal; }
+  #vaBox .note { color: var(--muted); margin-top: 6px; }
   @media (max-width: 760px) {
     body { flex-direction: column; overflow: auto; }
     aside { width: 100%; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
@@ -95,6 +107,14 @@
   <label class="check"><input type="checkbox" id="multiply"> Multiply blend (overlaps go dark)</label>
   <div class="btns"><button id="reseed">Re-roll dots</button></div>
 
+  <h2>Visual angle</h2>
+  <label class="check"><input type="checkbox" id="showVA"> Show disparity in degrees</label>
+  <details>
+    <summary>Viewing setup</summary>
+    <div id="vaParams"></div>
+    <div id="vaAuto" style="color: var(--muted); font-size: 12px"></div>
+  </details>
+
   <h2>Playback</h2>
   <div class="btns">
     <button id="play">Pause</button>
@@ -113,7 +133,7 @@
     <button id="rec">Record WebM (1 loop)</button>
   </div>
 </aside>
-<main><canvas id="out"></canvas></main>
+<main><canvas id="out"></canvas><div id="vaBox" hidden></div></main>
 
 <script>
 const $ = id => document.getElementById(id);
@@ -443,6 +463,42 @@ function render() {
   ctx.fill();
 }
 
+// ---- Visual angle -------------------------------------------------------------
+// VA(°) = 180/π · 2·atan(size / (2·distance)), with size = on-screen size of the offset.
+const va = size => 180 / Math.PI * (2 * Math.atan(size / (2 * P.dist)));
+addParam($('vaParams'), 'dist', 'View dist (cm)', 10, 300, 1, 57, updateVA);
+addParam($('vaParams'), 'ppi', 'Screen px / inch', 50, 300, 1, 96, updateVA);
+addParam($('vaParams'), 'wcm', 'Measured width (cm, 0 = auto)', 0, 100, 0.1, 0, updateVA);
+$('showVA').addEventListener('change', updateVA);
+window.addEventListener('resize', updateVA);
+
+function updateVA() {
+  const box = $('vaBox');
+  const cssW = out.getBoundingClientRect().width;
+  const autoW = cssW / P.ppi * 2.54;
+  $('vaAuto').textContent = `Auto width: ${cssW.toFixed(0)} screen px ≈ ${autoW.toFixed(1)} cm. ` +
+    'For accuracy, measure the image with a ruler and enter it above (MacBooks are ~127 px/inch).';
+  box.hidden = !$('showVA').checked;
+  if (box.hidden) return;
+  const wcm = P.wcm > 0 ? P.wcm : autoW, cmPerPx = wcm / P.res;
+  // Left eye (red lens) sees the cyan dots. Cyan shifted right of red => crossed => near.
+  const row = (label, px) => {
+    const cm = Math.abs(px) * cmPerPx, deg = va(cm) * Math.sign(px);
+    const dir = px === 0 ? 'none' : px > 0 ? 'near (crossed)' : 'far (uncrossed)';
+    return `<tr><td>${label}</td><td>${px} px</td><td>${cm.toFixed(2)} cm</td>
+      <td>${deg.toFixed(3)}°</td><td>${(deg * 60).toFixed(1)}′</td><td>${dir}</td></tr>`;
+  };
+  const vert = P.oyb || P.oya ? `<div class="note">Vertical offsets (${P.oyb}, ${P.oya} px) aren't counted as disparity.</div>` : '';
+  box.innerHTML = `<table>
+    <tr><th>Disparity</th><th>offset</th><th>on screen</th><th>degrees</th><th>arcmin</th><th></th></tr>
+    ${row('Shape vs background', P.oxa)}
+    ${row('Shape vs page', P.oxb + P.oxa)}
+    ${row('Background vs page', P.oxb)}
+    <tr><td>Whole image</td><td>${P.res} px</td><td>${wcm.toFixed(1)} cm</td><td>${va(wcm).toFixed(2)}°</td><td></td><td></td></tr>
+    </table>
+    <div class="note">At ${P.dist} cm, ${P.wcm > 0 ? 'measured' : 'estimated'} width. Near/far assumes the red lens is on the left eye.</div>${vert}`;
+}
+
 function step(dir) {
   if (!frames.length) return;
   frameIdx = (frameIdx + dir + frames.length) % frames.length;
@@ -458,7 +514,7 @@ function loop(now) {
     const dur = P.fps > 0 ? 1000 / P.fps : 100;
     if (now - lastSwitch >= dur) { lastSwitch = now; regenPoints(); }
   }
-  if (dirty) { dirty = false; render(); }
+  if (dirty) { dirty = false; render(); updateVA(); }
   requestAnimationFrame(loop);
 }
 
