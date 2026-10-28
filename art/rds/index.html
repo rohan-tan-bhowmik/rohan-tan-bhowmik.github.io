@@ -71,6 +71,8 @@
   #vaBox[hidden] { display: none; }
   #vaBox .val { font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; }
   #vaBox .note { color: var(--muted); margin-top: 2px; }
+  #vaBox .head { display: flex; align-items: center; gap: 12px; justify-content: space-between; }
+  #vaBox .head button { padding: 2px 8px; font-size: 12px; }
   canvas#out { margin: auto; }
   body.native main { overflow: auto; align-items: flex-start; justify-content: flex-start; }
   body.native canvas#out { max-width: none; max-height: none; }
@@ -108,7 +110,7 @@
   <div class="btns"><button id="reseed">Re-roll dots</button></div>
 
   <h2>Disparity</h2>
-  <label class="check"><input type="checkbox" id="showVA"> Show disparity (arcseconds)</label>
+  <div class="btns"><button id="showVA">Show disparity</button></div>
   <label class="check" title="Draw one image pixel per physical screen pixel, so Offset X add = disparity in screen pixels">
     <input type="checkbox" id="native"> Show at 1:1 screen pixels</label>
   <details>
@@ -474,7 +476,11 @@ addParam($('vaParams'), 'diag', 'Screen diagonal (in)', 10, 40, 0.1, 14.2, updat
 addParam($('vaParams'), 'scrW', 'Screen width (px)', 640, 7680, 1, 3024, updateVA);
 addParam($('vaParams'), 'scrH', 'Screen height (px)', 480, 4320, 1, 1964, updateVA);
 addParam($('vaParams'), 'dist', 'Distance (cm)', 20, 150, 1, 50, updateVA);
-['showVA', 'native'].forEach(id => $(id).addEventListener('change', updateVA));
+let vaShown = false;
+const toggleVA = () => { vaShown = !vaShown; updateVA(); };
+$('showVA').onclick = toggleVA;
+$('vaBox').addEventListener('click', e => { if (e.target.closest('button')) toggleVA(); });
+$('native').addEventListener('change', updateVA);
 window.addEventListener('resize', updateVA);
 
 function updateVA() {
@@ -483,15 +489,17 @@ function updateVA() {
   out.style.width = native ? `${P.res / devicePixelRatio}px` : '';
 
   const box = $('vaBox');
-  box.hidden = !$('showVA').checked;
+  box.hidden = !vaShown;
+  $('showVA').textContent = vaShown ? 'Hide disparity' : 'Show disparity';
   if (box.hidden) return;
   const pitch = P.diag * 2.54 / Math.hypot(P.scrW, P.scrH);          // cm per physical pixel
   const scrPerImg = out.getBoundingClientRect().width * devicePixelRatio / P.res;
   const px = Math.abs(P.oxa) * scrPerImg;                               // disparity in screen pixels
   const arcsec = va(px * pitch) * 3600;
   const whole = Math.abs(px - Math.round(px)) < 0.02;
-  box.innerHTML = `<div class="val">${arcsec.toFixed(0)}″ disparity</div>
-    <div class="note">${whole ? Math.round(px) : px.toFixed(2)} screen px × ${(va(pitch) * 3600).toFixed(1)}″ per pixel${
+  box.innerHTML = `<div class="head"><div class="val">${arcsec.toFixed(0)} arcseconds disparity</div>
+    <button title="Hide this window">Hide</button></div>
+    <div class="note">${whole ? Math.round(px) : px.toFixed(2)} screen px × ${(va(pitch) * 3600).toFixed(1)} arcseconds per pixel${
       whole ? '' : ' (not whole pixels: turn on 1:1)'}</div>`;
 }
 
