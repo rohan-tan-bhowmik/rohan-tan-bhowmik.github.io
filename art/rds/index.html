@@ -89,6 +89,8 @@
   <h2>Dots</h2>
   <div id="dotParams"></div>
   <label class="check"><input type="checkbox" id="newDots"> New random dots every frame</label>
+  <label class="check" title="Slide method: remove background dots where the shape lands, fill the spot it left with new dots">
+    <input type="checkbox" id="fix" checked> Fill Area 1 / clear Area 3</label>
   <label class="check"><input type="checkbox" id="invert"> Invert mask</label>
   <label class="check"><input type="checkbox" id="multiply"> Multiply blend (overlaps go dark)</label>
   <div class="btns"><button id="reseed">Re-roll dots</button></div>
@@ -137,7 +139,7 @@ function addParam(parent, key, label, min, max, step, val, onChange) {
 let frames = [];        // [{lum: Uint8Array, img: canvas, dur: ms}]
 let maskSize = 0;       // width/height of each lum array
 let srcKind = null;     // 'cube' | 'file'
-let ptsX, ptsY;
+let ptsX, ptsY, fillX, fillY;   // fill* = spare dots used to fill Area 1
 let frameIdx = 0, playing = true, dirty = true, lastSwitch = 0;
 
 const out = $('out');
@@ -147,7 +149,11 @@ const ctx = out.getContext('2d');
 function regenPoints() {
   const n = P.count, r = P.res;
   ptsX = new Float32Array(n); ptsY = new Float32Array(n);
-  for (let i = 0; i < n; i++) { ptsX[i] = Math.random() * r; ptsY[i] = Math.random() * r; }
+  fillX = new Float32Array(n); fillY = new Float32Array(n);
+  for (let i = 0; i < n; i++) {
+    ptsX[i] = Math.random() * r; ptsY[i] = Math.random() * r;
+    fillX[i] = Math.random() * r; fillY[i] = Math.random() * r;
+  }
   dirty = true;
 }
 
@@ -161,7 +167,7 @@ addParam($('dotParams'), 'oyb', 'Offset Y base', -200, 200, 1, 0, D);
 addParam($('dotParams'), 'oxa', 'Offset X add', -300, 300, 1, 100, D);
 addParam($('dotParams'), 'oya', 'Offset Y add', -300, 300, 1, 0, D);
 addParam($('playParams'), 'fps', 'FPS (0 = source)', 0, 60, 1, 0, null);
-['invert', 'multiply'].forEach(id => $(id).addEventListener('change', D));
+['invert', 'multiply', 'fix'].forEach(id => $(id).addEventListener('change', D));
 $('view').addEventListener('change', D);
 $('reseed').onclick = regenPoints;
 
@@ -413,13 +419,26 @@ function render() {
   for (let i = 0; i < n; i++) { ctx.moveTo(ptsX[i] + r, ptsY[i]); ctx.arc(ptsX[i], ptsY[i], r, 0, 6.2832); }
   ctx.fill();
 
+  // Cyan = red dots, with the shape's dots shifted by the extra offset.
+  // With the fix (slide method): drop background dots where the shape lands (Area 3)
+  // and fill the spot it moved away from with spare dots (Area 1).
+  const fix = $('fix').checked;
+  const inM = (x, y) => x >= 0 && y >= 0 && x < R && y < R &&
+    (lum[((y * scale) | 0) * M + ((x * scale) | 0)] > thr) !== inv;
+  const dot = (x, y) => { ctx.moveTo(x + r, y); ctx.arc(x, y, r, 0, 6.2832); };
   ctx.fillStyle = '#00ffff';
   ctx.beginPath();
   for (let i = 0; i < n; i++) {
-    const mx = Math.min(M - 1, (ptsX[i] * scale) | 0), my = Math.min(M - 1, (ptsY[i] * scale) | 0);
-    const inside = (lum[my * M + mx] > thr) !== inv;
-    const x = ptsX[i] + (inside ? dx1 : dx0), y = ptsY[i] + (inside ? dy1 : dy0);
-    ctx.moveTo(x + r, y); ctx.arc(x, y, r, 0, 6.2832);
+    const x = ptsX[i], y = ptsY[i];
+    if (inM(x, y)) dot(x + dx1, y + dy1);
+    else if (!fix || !inM(x - P.oxa, y - P.oya)) dot(x + dx0, y + dy0);
+  }
+  if (fix) {
+    for (let i = 0; i < n; i++) {
+      const x = fillX[i], y = fillY[i], sx = x - dx0, sy = y - dy0;
+      const noBg = sx < 0 || sy < 0 || sx >= R || sy >= R || inM(sx, sy);
+      if (noBg && !inM(x - dx1, y - dy1)) dot(x, y);
+    }
   }
   ctx.fill();
 }
@@ -598,6 +617,7 @@ async function pollConfig() {
     stKey = sk;
     applyMap(s, ST_MAP);
     if (typeof s.new_dots_each_frame === 'boolean') $('newDots').checked = s.new_dots_each_frame;
+    if (typeof s.fix_areas === 'boolean') $('fix').checked = s.fix_areas;
   }
   const ck = JSON.stringify(c);
   if (ck !== cubeKey) {
